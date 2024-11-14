@@ -5,84 +5,96 @@ import { Input } from '@/components/ui/input'
 import CommunityFeedCard from '@/components/CommunityFeedCard'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { IPost } from '@/types'
 
-// 목업 데이터
-const MOCK_FEED_DATA = [
+// 목업 데이터에 isLiked 추가
+const INITIAL_FEED_DATA: IPost[] = [
     {
         postId: '1',
         imageURL: 'https://picsum.photos/400/400',
         userName: '창작자1',
         likes: 150,
-        comments: 23
+        comments: 23,
+        isLiked: false
     },
     {
         postId: '2',
         imageURL: 'https://picsum.photos/401/400',
         userName: '창작자2',
         likes: 89,
-        comments: 12
+        comments: 12,
+        isLiked: false
     },
     {
         postId: '3',
         imageURL: 'https://picsum.photos/402/400',
         userName: '창작자3',
         likes: 120,
-        comments: 15
+        comments: 15,
+        isLiked: false
     },
     {
         postId: '4',
         imageURL: 'https://picsum.photos/403/400',
         userName: '창작자4',
         likes: 100,
-        comments: 10
+        comments: 10,
+        isLiked: false
     },
     {
         postId: '5',
         imageURL: 'https://picsum.photos/404/400',
         userName: '창작자5',
         likes: 110,
-        comments: 11
+        comments: 11,
+        isLiked: false
     },
     {
         postId: '6',
         imageURL: 'https://picsum.photos/405/400',
         userName: '창작자6',
         likes: 130,
-        comments: 16
+        comments: 16,
+        isLiked: false
     },
     {
         postId: '7',
         imageURL: 'https://picsum.photos/406/400',
         userName: '창작자7',
         likes: 140,
-        comments: 17
+        comments: 17,
+        isLiked: false
     },
     {
         postId: '8',
         imageURL: 'https://picsum.photos/407/400',
         userName: '창작자8',
         likes: 160,
-        comments: 18
+        comments: 18,
+        isLiked: false
     },
     {
         postId: '9',
         imageURL: 'https://picsum.photos/408/400',
         userName: '창작자9',
         likes: 170,
-        comments: 19
+        comments: 19,
+        isLiked: false
     },
     {
         postId: '10',
         imageURL: 'https://picsum.photos/409/400',
         userName: '창작자10',
         likes: 180,
-        comments: 20
+        comments: 20,
+        isLiked: false
     }
 ]
 
 export default function Home() {
     const [prompt, setPrompt] = useState('')
     const [error, setError] = useState('')
+    const [feedData, setFeedData] = useState(INITIAL_FEED_DATA)
     const router = useRouter()
 
     const handleGenerateImage = () => {
@@ -90,8 +102,32 @@ export default function Home() {
             setError('프롬프트를 입력해 주세요')
             return
         }
-        // 실제 API 연동 대신 이미지 생성 페이지로 이동
         router.push(`/generate?prompt=${encodeURIComponent(prompt)}`)
+    }
+
+    const handleLike = (postId: string) => {
+        setFeedData(prev =>
+            prev.map(post =>
+                post.postId === postId
+                    ? {
+                          ...post,
+                          likes: post.isLiked ? post.likes - 1 : post.likes + 1,
+                          isLiked: !post.isLiked
+                      }
+                    : post
+            )
+        )
+    }
+
+    const handleAddComment = (postId: string, content: string) => {
+        setFeedData(prev =>
+            prev.map(post =>
+                post.postId === postId
+                    ? { ...post, comments: post.comments + 1 }
+                    : post
+            )
+        )
+        // 실제 구현에서는 여기서 API 호출을 통해 댓글을 저장합니다
     }
 
     return (
@@ -119,8 +155,13 @@ export default function Home() {
             </section>
 
             <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {MOCK_FEED_DATA.map(post => (
-                    <CommunityFeedCard key={post.postId} {...post} />
+                {feedData.map(post => (
+                    <CommunityFeedCard
+                        key={post.postId}
+                        {...post}
+                        onLike={handleLike}
+                        onAddComment={handleAddComment}
+                    />
                 ))}
             </section>
         </main>
