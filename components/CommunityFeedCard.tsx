@@ -2,7 +2,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Heart, MessageCircle } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { IPost, IComment } from '@/types'
+import { IPost, ICommunityFeedCardComment } from '@/types'
 import { useState } from 'react'
 import CommentModal from './CommentModal'
 import { cn } from '@/lib/utils'
@@ -13,7 +13,7 @@ interface ICommunityFeedCardProps extends IPost {
 }
 
 // 임시 목업 댓글 데이터
-const MOCK_COMMENTS: IComment[] = [
+const MOCK_COMMENTS: ICommunityFeedCardComment[] = [
     {
         id: '1',
         postId: '1',

@@ -6,14 +6,14 @@ import {
     DialogTitle
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
-import { IComment } from '@/types'
+import { ICommunityFeedCardComment } from '@/types'
 import { useState } from 'react'
 
 interface ICommentModalProps {
     isOpen: boolean
     onClose: () => void
     postId: string
-    comments: IComment[]
+    comments: ICommunityFeedCardComment[]
     onAddComment: (content: string) => void
 }
 
