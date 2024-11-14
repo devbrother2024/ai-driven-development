@@ -1,101 +1,128 @@
-import Image from "next/image";
+'use client'
+
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import CommunityFeedCard from '@/components/CommunityFeedCard'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+
+// 목업 데이터
+const MOCK_FEED_DATA = [
+    {
+        postId: '1',
+        imageURL: 'https://picsum.photos/400/400',
+        userName: '창작자1',
+        likes: 150,
+        comments: 23
+    },
+    {
+        postId: '2',
+        imageURL: 'https://picsum.photos/401/400',
+        userName: '창작자2',
+        likes: 89,
+        comments: 12
+    },
+    {
+        postId: '3',
+        imageURL: 'https://picsum.photos/402/400',
+        userName: '창작자3',
+        likes: 120,
+        comments: 15
+    },
+    {
+        postId: '4',
+        imageURL: 'https://picsum.photos/403/400',
+        userName: '창작자4',
+        likes: 100,
+        comments: 10
+    },
+    {
+        postId: '5',
+        imageURL: 'https://picsum.photos/404/400',
+        userName: '창작자5',
+        likes: 110,
+        comments: 11
+    },
+    {
+        postId: '6',
+        imageURL: 'https://picsum.photos/405/400',
+        userName: '창작자6',
+        likes: 130,
+        comments: 16
+    },
+    {
+        postId: '7',
+        imageURL: 'https://picsum.photos/406/400',
+        userName: '창작자7',
+        likes: 140,
+        comments: 17
+    },
+    {
+        postId: '8',
+        imageURL: 'https://picsum.photos/407/400',
+        userName: '창작자8',
+        likes: 160,
+        comments: 18
+    },
+    {
+        postId: '9',
+        imageURL: 'https://picsum.photos/408/400',
+        userName: '창작자9',
+        likes: 170,
+        comments: 19
+    },
+    {
+        postId: '10',
+        imageURL: 'https://picsum.photos/409/400',
+        userName: '창작자10',
+        likes: 180,
+        comments: 20
+    }
+]
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    const [prompt, setPrompt] = useState('')
+    const [error, setError] = useState('')
+    const router = useRouter()
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+    const handleGenerateImage = () => {
+        if (!prompt.trim()) {
+            setError('프롬프트를 입력해 주세요')
+            return
+        }
+        // 실제 API 연동 대신 이미지 생성 페이지로 이동
+        router.push(`/generate?prompt=${encodeURIComponent(prompt)}`)
+    }
+
+    return (
+        <main className="container mx-auto px-4 py-8">
+            <section className="max-w-2xl mx-auto space-y-4 mb-16">
+                <div className="space-y-2">
+                    <Input
+                        placeholder="이미지 생성을 위한 프롬프트를 입력하세요"
+                        value={prompt}
+                        onChange={e => {
+                            setPrompt(e.target.value)
+                            setError('')
+                        }}
+                        className="h-12"
+                    />
+                    {error && <p className="text-red-500 text-sm">{error}</p>}
+                </div>
+                <Button
+                    onClick={handleGenerateImage}
+                    disabled={!prompt.trim()}
+                    className="w-full h-12"
+                >
+                    이미지 생성하기
+                </Button>
+            </section>
+
+            <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {MOCK_FEED_DATA.map(post => (
+                    <CommunityFeedCard key={post.postId} {...post} />
+                ))}
+            </section>
+        </main>
+    )
 }
