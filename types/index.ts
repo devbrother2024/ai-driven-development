@@ -80,3 +80,25 @@ export interface IGalleryImage {
 
 import { DateRange as DayPickerDateRange } from 'react-day-picker'
 export type DateRange = DayPickerDateRange
+
+// GalleryCard props interface
+export interface IGalleryCardProps {
+    image: IGalleryImage
+    onImageClick: () => void
+    onShareClick: () => void
+    onDelete: (imageId: string) => void
+}
+
+// ImageDetailModal props interface
+export interface IImageDetailModalProps {
+    image: IGalleryImage
+    isOpen: boolean
+    onClose: () => void
+}
+
+// ShareModal props interface
+export interface IShareModalProps {
+    image: IGalleryImage
+    isOpen: boolean
+    onClose: () => void
+}

@@ -1,24 +1,18 @@
 'use client'
 
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import { IGalleryImage } from '@/types'
+import { IGalleryImage, IImageDetailModalProps } from '@/types'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 
-interface ImageDetailModalProps {
-    image: IGalleryImage
-    isOpen: boolean
-    onClose: () => void
-}
-
 export function ImageDetailModal({
     image,
     isOpen,
     onClose
-}: ImageDetailModalProps) {
+}: IImageDetailModalProps) {
     const [isPublic, setIsPublic] = useState(image.isPublic)
     const [tags, setTags] = useState(image.tags)
     const [newTag, setNewTag] = useState('')

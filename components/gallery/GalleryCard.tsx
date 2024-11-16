@@ -1,6 +1,6 @@
 'use client'
 
-import { IGalleryImage } from '@/types'
+import { IGalleryImage, IGalleryCardProps } from '@/types'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Share, Trash2 } from 'lucide-react'
@@ -16,19 +16,12 @@ import {
 } from '@/components/ui/alert-dialog'
 import { useState } from 'react'
 
-interface GalleryCardProps {
-    image: IGalleryImage
-    onImageClick: () => void
-    onShareClick: () => void
-    onDelete: (imageId: string) => void
-}
-
 export function GalleryCard({
     image,
     onImageClick,
     onShareClick,
     onDelete
-}: GalleryCardProps) {
+}: IGalleryCardProps) {
     const [showDeleteAlert, setShowDeleteAlert] = useState(false)
 
     return (
