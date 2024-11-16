@@ -9,14 +9,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
-import { IComment } from '@/types'
+import { IComment, ICommentsModalProps } from '@/types'
 import { ScrollArea } from '@/components/ui/scroll-area'
-
-interface ICommentsModalProps {
-    postId: string
-    isOpen: boolean
-    onClose: () => void
-}
 
 export function CommentsModal({
     postId,

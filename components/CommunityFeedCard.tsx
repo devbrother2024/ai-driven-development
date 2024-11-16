@@ -1,16 +1,12 @@
 'use client'
 
-import { IPost } from '@/types'
+import { ICommunityFeedCardProps } from '@/types'
 import { Card, CardContent } from '@/components/ui/card'
 import Image from 'next/image'
 import { Heart, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { CommentsModal } from './CommentsModal'
-
-interface ICommunityFeedCardProps {
-    post: IPost
-}
 
 export function CommunityFeedCard({
     post: initialPost
