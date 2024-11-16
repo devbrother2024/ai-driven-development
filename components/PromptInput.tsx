@@ -16,8 +16,9 @@ export function PromptInput() {
             return
         }
 
-        // 실제 API 연동 대신 임시로 이동만 처리
-        router.push('/generate')
+        // URL 쿼리 파라미터로 프롬프트 전달
+        const encodedPrompt = encodeURIComponent(prompt.trim())
+        router.push(`/generate?prompt=${encodedPrompt}`)
     }
 
     return (

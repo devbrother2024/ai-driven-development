@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { StyleOptions } from './StyleOptions'
 import { ImageGeneration } from './ImageGeneration'
 import { GeneratedImageActions } from './GeneratedImageActions'
@@ -14,6 +15,7 @@ const DEFAULT_STYLE_OPTIONS: IStyleOptions = {
 }
 
 export function GenerateImageForm() {
+    const searchParams = useSearchParams()
     const [prompt, setPrompt] = useState('')
     const [error, setError] = useState('')
     const [styleOptions, setStyleOptions] = useState<IStyleOptions>(
@@ -21,6 +23,14 @@ export function GenerateImageForm() {
     )
     const [generatedImageUrl, setGeneratedImageUrl] = useState('')
     const [isGenerating, setIsGenerating] = useState(false)
+
+    // URL의 프롬프트 파라미터를 읽어와 초기값으로 설정
+    useEffect(() => {
+        const urlPrompt = searchParams.get('prompt')
+        if (urlPrompt) {
+            setPrompt(decodeURIComponent(urlPrompt))
+        }
+    }, [searchParams])
 
     const handlePromptChange = (value: string) => {
         setPrompt(value)
