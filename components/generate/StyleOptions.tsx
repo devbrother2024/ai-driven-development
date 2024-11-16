@@ -5,14 +5,9 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select'
-import { IStyleOptions } from '@/types'
+import { IStyleOptions, IStyleOptionsProps } from '@/types'
 
-interface StyleOptionsProps {
-    options: IStyleOptions
-    onChange: (options: IStyleOptions) => void
-}
-
-export function StyleOptions({ options, onChange }: StyleOptionsProps) {
+export function StyleOptions({ options, onChange }: IStyleOptionsProps) {
     const handleChange = (key: keyof IStyleOptions, value: string) => {
         onChange({ ...options, [key]: value })
     }

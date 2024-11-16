@@ -36,6 +36,26 @@ export interface ICommunityFeedCardProps {
     post: IPost
 }
 
+// StyleOptions props interface
+export interface IStyleOptionsProps {
+    options: IStyleOptions
+    onChange: (options: IStyleOptions) => void
+}
+
+// ImageGeneration props interface
+export interface IImageGenerationProps {
+    onGenerate: () => void
+    isGenerating: boolean
+    generatedImageUrl: string
+}
+
+// GeneratedImageActions props interface
+export interface IGeneratedImageActionsProps {
+    imageUrl: string
+    prompt: string
+    styleOptions: IStyleOptions
+}
+
 export interface IStyleOptions {
     artStyle: string
     colorTone: string

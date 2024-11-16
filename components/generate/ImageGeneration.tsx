@@ -1,18 +1,13 @@
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
-
-interface ImageGenerationProps {
-    onGenerate: () => void
-    isGenerating: boolean
-    generatedImageUrl: string
-}
+import { IImageGenerationProps } from '@/types'
 
 export function ImageGeneration({
     onGenerate,
     isGenerating,
     generatedImageUrl
-}: ImageGenerationProps) {
+}: IImageGenerationProps) {
     return (
         <div className="space-y-4">
             <Button
