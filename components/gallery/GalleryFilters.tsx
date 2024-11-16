@@ -9,20 +9,18 @@ import {
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { DatePickerWithRange } from '@/components/ui/date-picker'
-import { useState } from 'react'
+import { useGalleryStore } from '@/store/gallery'
 import { DateRange } from 'react-day-picker'
 
 export function GalleryFilters() {
-    const [category, setCategory] = useState<string>('all')
-    const [dateRange, setDateRange] = useState<DateRange | undefined>()
-    const [sortBy, setSortBy] = useState<string>('latest')
-    const [visibility, setVisibility] = useState<string>('all')
+    const { filters, setFilter, resetFilters } = useGalleryStore()
 
     const categories = [
         { value: 'all', label: '전체' },
-        { value: 'landscape', label: '풍경' },
-        { value: 'portrait', label: '인물' },
-        { value: 'abstract', label: '추상' }
+        { value: '판타지', label: '판타지' },
+        { value: 'SF', label: 'SF' },
+        { value: '자연', label: '자연' },
+        { value: '일상', label: '일상' }
     ]
 
     const sortOptions = [
@@ -31,16 +29,12 @@ export function GalleryFilters() {
         { value: 'name', label: '이름순' }
     ]
 
-    const resetFilters = () => {
-        setCategory('all')
-        setDateRange(undefined)
-        setSortBy('latest')
-        setVisibility('all')
-    }
-
     return (
         <div className="flex flex-wrap gap-4 items-center">
-            <Select value={category} onValueChange={setCategory}>
+            <Select
+                value={filters.category}
+                onValueChange={value => setFilter({ category: value })}
+            >
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="카테고리 선택" />
                 </SelectTrigger>
@@ -53,9 +47,17 @@ export function GalleryFilters() {
                 </SelectContent>
             </Select>
 
-            <DatePickerWithRange value={dateRange} onChange={setDateRange} />
+            <DatePickerWithRange
+                value={filters.dateRange}
+                onChange={(dateRange: DateRange | undefined) =>
+                    setFilter({ dateRange })
+                }
+            />
 
-            <Select value={sortBy} onValueChange={setSortBy}>
+            <Select
+                value={filters.sortBy}
+                onValueChange={value => setFilter({ sortBy: value })}
+            >
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="정렬 기준" />
                 </SelectTrigger>
@@ -68,7 +70,10 @@ export function GalleryFilters() {
                 </SelectContent>
             </Select>
 
-            <Select value={visibility} onValueChange={setVisibility}>
+            <Select
+                value={filters.visibility}
+                onValueChange={value => setFilter({ visibility: value })}
+            >
                 <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="공개 설정" />
                 </SelectTrigger>
