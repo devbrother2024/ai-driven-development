@@ -23,7 +23,7 @@
    - **파일 위치**: `components/StyleOptions.tsx`
    - **UI 구성**:
      - 스타일 카테고리별 드롭다운 메뉴 (ShadcN의 `Select` 컴포넌트 사용)
-     - 각 옵션에 대한 ���라이더 컨트롤 (ShadcN의 `Slider` 컴포넌트 사용)
+     - 각 옵션에 대한 슬라이더 컨트롤 (ShadcN의 `Slider` 컴포넌트 사용)
    - **스타일 옵션 항목**:
      ```typescript
      interface IStyleOptions {

@@ -35,3 +35,8 @@ export interface ICommentsModalProps {
 export interface ICommunityFeedCardProps {
     post: IPost
 }
+
+export interface IStyleOptions {
+    artStyle: string
+    colorTone: string
+}
