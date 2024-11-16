@@ -46,7 +46,7 @@ export function GeneratedImageActions({
         <div className="flex gap-2">
             <Button onClick={handleSave} variant="outline">
                 <Save className="mr-2 h-4 w-4" />
-                저장하기
+                갤러리에 저장하기
             </Button>
             <Button onClick={handleShare} variant="outline">
                 <Share2 className="mr-2 h-4 w-4" />
