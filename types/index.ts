@@ -60,3 +60,23 @@ export interface IStyleOptions {
     artStyle: string
     colorTone: string
 }
+
+export interface IGalleryImage {
+    id: string
+    userId: string
+    imageUrl: string
+    prompt: string
+    styleOptions: {
+        artStyle: string
+        colorTone: string
+    }
+    categories: string[]
+    tags: string[]
+    isPublic: boolean
+    order: number
+    createdAt: string
+    updatedAt: string
+}
+
+import { DateRange as DayPickerDateRange } from 'react-day-picker'
+export type DateRange = DayPickerDateRange
