@@ -1,8 +1,18 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const config = {
     images: {
-        domains: ['picsum.photos']
+        domains: ['picsum.photos'],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'replicate.com'
+            },
+            {
+                protocol: 'https',
+                hostname: 'replicate.delivery'
+            }
+        ]
     }
 }
 
-export default nextConfig
+export default config

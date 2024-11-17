@@ -102,3 +102,29 @@ export interface IShareModalProps {
     isOpen: boolean
     onClose: () => void
 }
+
+// 기존 인터페이스에 추가
+export interface IGenerateRequest {
+    prompt: string
+    styleOptions: {
+        artStyle: string
+        colorTone: string
+    }
+}
+
+export interface IGenerateResponse {
+    success: boolean
+    imageUrl: string
+    error?: {
+        code: string
+        message: string
+    }
+}
+
+export interface IErrorResponse {
+    success: false
+    error: {
+        code: string
+        message: string
+    }
+}
