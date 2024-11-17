@@ -128,3 +128,8 @@ export interface IErrorResponse {
         message: string
     }
 }
+
+export interface INavigationItem {
+    name: string
+    href: string
+}
