@@ -23,11 +23,12 @@ export function Header() {
                     className="flex items-center hover:opacity-80 transition-opacity"
                 >
                     <Image
-                        src="/logo.svg"
+                        src="/logo.webp"
                         alt="Artify 로고"
-                        width={0}
+                        layout="fixed"
+                        width={32}
                         height={32}
-                        className="h-8 w-auto"
+                        className="h-8 w-8"
                         priority
                     />
                 </Link>

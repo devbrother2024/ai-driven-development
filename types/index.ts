@@ -57,8 +57,25 @@ export interface IGeneratedImageActionsProps {
 }
 
 export interface IStyleOptions {
-    artStyle: string
-    colorTone: string
+    artStyle:
+        | '디지털아트'
+        | '수채화'
+        | '유화'
+        | '펜화'
+        | '연필화'
+        | '로고_미니멀'
+        | '로고_3D'
+        | '로고_그라디언트'
+        | '로고_빈티지'
+        | '로고_모던'
+    colorTone:
+        | '밝은'
+        | '어두운'
+        | '파스텔'
+        | '흑백'
+        | '컬러풀'
+        | '모노톤'
+        | '메탈릭'
 }
 
 export interface IGalleryImage {
