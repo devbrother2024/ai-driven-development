@@ -1,18 +1,13 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
-import { Toaster } from '@/components/ui/toaster'
 import { Header } from '@/components/layout/header'
 import { cn } from '@/lib/utils'
+import { ClerkProvider } from '@clerk/nextjs'
 
 const geistSans = localFont({
     src: './fonts/GeistVF.woff',
     variable: '--font-geist-sans',
-    weight: '100 900'
-})
-const geistMono = localFont({
-    src: './fonts/GeistMonoVF.woff',
-    variable: '--font-geist-mono',
     weight: '100 900'
 })
 
@@ -27,16 +22,18 @@ export default function RootLayout({
     children: React.ReactNode
 }) {
     return (
-        <html lang="ko" suppressHydrationWarning>
-            <body
-                className={cn(
-                    'min-h-screen bg-background antialiased',
-                    geistSans.className
-                )}
-            >
-                <Header />
-                <main className="pt-16">{children}</main>
-            </body>
-        </html>
+        <ClerkProvider afterSignOutUrl="/">
+            <html lang="ko" suppressHydrationWarning>
+                <body
+                    className={cn(
+                        'min-h-screen bg-background antialiased',
+                        geistSans.className
+                    )}
+                >
+                    <Header />
+                    <main className="pt-16">{children}</main>
+                </body>
+            </html>
+        </ClerkProvider>
     )
 }
