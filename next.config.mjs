@@ -10,6 +10,10 @@ const config = {
             {
                 protocol: 'https',
                 hostname: 'replicate.delivery'
+            },
+            {
+                protocol: 'https',
+                hostname: 'jgvktppjdbligdhehesn.supabase.co'
             }
         ]
     }

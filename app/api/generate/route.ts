@@ -1,14 +1,61 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import Replicate from 'replicate'
 import { IGenerateRequest, IGenerateResponse, IErrorResponse } from '@/types'
+import { createClient } from '@supabase/supabase-js'
+import { v4 as uuidv4 } from 'uuid'
+import { auth, getAuth } from '@clerk/nextjs/server'
+import { db } from '@/db'
+import { images } from '@/db/schema'
 
 // Replicate 클라이언트 초기화
 const replicate = new Replicate({
     auth: process.env.REPLICATE_API_TOKEN
 })
 
-export async function POST(request: Request) {
+// Supabase 클라이언트 초기화
+const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+        global: {
+            // Get the custom Supabase token from Clerk
+            fetch: async (url, options = {}) => {
+                const clerkAuth = await auth()
+                const clerkToken = await clerkAuth.getToken({
+                    template: 'supabase'
+                })
+
+                // Insert the Clerk Supabase token into the headers
+                const headers = new Headers(options?.headers)
+                headers.set('Authorization', `Bearer ${clerkToken}`)
+
+                // Now call the default fetch
+                return fetch(url, {
+                    ...options,
+                    headers
+                })
+            }
+        }
+    }
+)
+
+export async function POST(request: NextRequest) {
     try {
+        // 사용자 인증 확인
+        const { userId } = getAuth(request)
+        if (!userId) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: {
+                        code: 'UNAUTHORIZED',
+                        message: '인증되지 않은 사용자입니다.'
+                    }
+                } as IErrorResponse,
+                { status: 401 }
+            )
+        }
+
         // 요청 데이터 파싱
         const { prompt, styleOptions }: IGenerateRequest = await request.json()
 
@@ -117,11 +164,61 @@ export async function POST(request: Request) {
             )
         }
 
-        // 성공 응답
-        return NextResponse.json({
-            success: true,
-            imageUrl: finalPrediction.output[0]
-        } as IGenerateResponse)
+        // 이미지 생성이 완료되면 Supabase에 저장
+        if (finalPrediction.status === 'succeeded') {
+            const imageUrl = finalPrediction.output[0]
+
+            // 이미지 다운로드
+            const imageResponse = await fetch(imageUrl)
+            const imageBlob = await imageResponse.blob()
+
+            // 파일 경로 생성
+            const fileUuid = uuidv4()
+            const filePath = `${userId}/${fileUuid}.webp`
+
+            // Supabase Storage에 이미지 업로드
+            const { error: uploadError } = await supabase.storage
+                .from('images')
+                .upload(filePath, imageBlob, {
+                    contentType: 'image/webp',
+                    cacheControl: '3600'
+                })
+
+            if (uploadError) {
+                throw new Error('이미지 업로드 실패: ' + uploadError.message)
+            }
+
+            // 데이터베이스에 메타데이터 저장
+            await db.insert(images).values({
+                userId,
+                filePath,
+                prompt,
+                artStyle: styleOptions.artStyle,
+                colorTone: styleOptions.colorTone,
+                tags: [],
+                isPublic: false
+            })
+
+            // Supabase 스토리지 URL 생성
+            const storageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images/${filePath}`
+
+            // 성공 응답
+            return NextResponse.json({
+                success: true,
+                imageUrl: storageUrl
+            } as IGenerateResponse)
+        }
+
+        return NextResponse.json(
+            {
+                success: false,
+                error: {
+                    code: 'GENERATION_FAILED',
+                    message: '이미지 생성에 실패했습니다.'
+                }
+            } as IErrorResponse,
+            { status: 500 }
+        )
     } catch (error) {
         console.error('Image generation error:', error)
         return NextResponse.json(
