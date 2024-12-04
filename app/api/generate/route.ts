@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Replicate from 'replicate'
 import { IGenerateRequest, IGenerateResponse, IErrorResponse } from '@/types'
-import { createClient } from '@supabase/supabase-js'
+import { createSupabaseClient } from '@/utils/supabase'
 import { v4 as uuidv4 } from 'uuid'
 import { auth, getAuth } from '@clerk/nextjs/server'
 import { db } from '@/db'
@@ -11,33 +11,6 @@ import { images } from '@/db/schema'
 const replicate = new Replicate({
     auth: process.env.REPLICATE_API_TOKEN
 })
-
-// Supabase 클라이언트 초기화
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-        global: {
-            // Get the custom Supabase token from Clerk
-            fetch: async (url, options = {}) => {
-                const clerkAuth = await auth()
-                const clerkToken = await clerkAuth.getToken({
-                    template: 'supabase'
-                })
-
-                // Insert the Clerk Supabase token into the headers
-                const headers = new Headers(options?.headers)
-                headers.set('Authorization', `Bearer ${clerkToken}`)
-
-                // Now call the default fetch
-                return fetch(url, {
-                    ...options,
-                    headers
-                })
-            }
-        }
-    }
-)
 
 export async function POST(request: NextRequest) {
     try {
@@ -55,6 +28,9 @@ export async function POST(request: NextRequest) {
                 { status: 401 }
             )
         }
+
+        // Supabase 클라이언트 초기화
+        const supabase = await createSupabaseClient()
 
         // 요청 데이터 파싱
         const { prompt, styleOptions }: IGenerateRequest = await request.json()
