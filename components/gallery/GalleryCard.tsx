@@ -15,6 +15,7 @@ import {
     AlertDialogTitle
 } from '@/components/ui/alert-dialog'
 import { useState } from 'react'
+import { useToast } from '@/hooks/use-toast'
 
 export function GalleryCard({
     image,
@@ -23,6 +24,21 @@ export function GalleryCard({
     onDelete
 }: IGalleryCardProps) {
     const [showDeleteAlert, setShowDeleteAlert] = useState(false)
+    const { toast } = useToast()
+
+    const handleShareClick = (e: React.MouseEvent) => {
+        e.stopPropagation()
+        if (image.isPublic) {
+            toast({
+                variant: 'destructive',
+                title: '이미 공유된 이미지입니다',
+                description:
+                    '동일한 이미지는 한 번만 공유할 수 있습니다.'
+            })
+            return
+        }
+        onShareClick()
+    }
 
     return (
         <>
@@ -45,10 +61,8 @@ export function GalleryCard({
                     <Button
                         size="icon"
                         variant="secondary"
-                        onClick={e => {
-                            e.stopPropagation()
-                            onShareClick()
-                        }}
+                        onClick={handleShareClick}
+                        className={image.isPublic ? 'opacity-50 cursor-not-allowed' : ''}
                     >
                         <Share className="h-4 w-4" />
                     </Button>

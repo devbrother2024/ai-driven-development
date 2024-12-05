@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { eq } from 'drizzle-orm'
+import { eq, and } from 'drizzle-orm'
 import { db } from '@/db'
-import { images, posts } from '@/db/schema'
+import { posts, images } from '@/db/schema'
 import { currentUser } from '@clerk/nextjs/server'
-import { ISharePostRequest, ISharePostResponse, IErrorResponse } from '@/types'
+import { IErrorResponse } from '@/types'
 
 export async function POST(request: NextRequest) {
     try {
@@ -21,13 +21,13 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        const body: ISharePostRequest = await request.json()
+        const { imageId, title, description, tags } = await request.json()
 
         // 이미지 존재 여부 및 소유권 확인
         const image = await db
             .select()
             .from(images)
-            .where(eq(images.id, body.imageId))
+            .where(and(eq(images.id, imageId), eq(images.userId, user.id)))
             .limit(1)
             .then(rows => rows[0])
 
@@ -44,56 +44,58 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        if (image.userId !== user.id) {
+        // isPublic으로 공유 여부 확인
+        if (image.isPublic) {
             return NextResponse.json<IErrorResponse>(
                 {
                     success: false,
                     error: {
-                        code: 'UNAUTHORIZED',
-                        message: '이 이미지를 공유할 권한이 없습니다.'
+                        code: 'ALREADY_SHARED',
+                        message: '이미 커뮤니티에 공유된 이미지입니다.'
                     }
                 },
-                { status: 403 }
+                { status: 400 }
             )
         }
 
-        // 이미지를 공개로 설정
-        await db
-            .update(images)
-            .set({ isPublic: true })
-            .where(eq(images.id, body.imageId))
+        // 트랜잭션으로 태그 업데이트와 게시물 생성을 함께 처리
+        const result = await db.transaction(async tx => {
+            // 이미지 태그 업데이트
+            await tx
+                .update(images)
+                .set({
+                    tags: tags,
+                    isPublic: true, // 공유 시 자동으로 공개로 설정
+                    updatedAt: new Date()
+                })
+                .where(eq(images.id, imageId))
 
-        // 게시물 생성
-        const [post] = await db
-            .insert(posts)
-            .values({
-                imageId: body.imageId,
-                userId: user.id,
-                title: body.title,
-                description: body.description
-            })
-            .returning()
+            // 게시물 생성
+            const [post] = await tx
+                .insert(posts)
+                .values({
+                    imageId,
+                    userId: user.id,
+                    title,
+                    description
+                })
+                .returning()
 
-        return NextResponse.json<ISharePostResponse>({
+            return post
+        })
+
+        return NextResponse.json({
             success: true,
-            post: {
-                id: post.id,
-                imageId: post.imageId,
-                userId: post.userId,
-                title: post.title,
-                description: post.description,
-                createdAt: post.createdAt,
-                updatedAt: post.updatedAt
-            }
+            post: result
         })
     } catch (error) {
-        console.error('Share Post Error:', error)
+        console.error('Community Share Error:', error)
         return NextResponse.json<IErrorResponse>(
             {
                 success: false,
                 error: {
-                    code: 'SHARE_FAILED',
-                    message: '게시물 공유에 실패했습니다.'
+                    code: 'INTERNAL_ERROR',
+                    message: '서버 내부 오류가 발생했습니다.'
                 }
             },
             { status: 500 }

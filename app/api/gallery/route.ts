@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
         const startDate = searchParams.get('startDate')
         const endDate = searchParams.get('endDate')
         const sortBy = searchParams.get('sortBy') as 'latest' | 'oldest'
+        const isPublic = searchParams.get('isPublic')
 
         // 쿼리 조건 구성
         const conditions = [eq(images.userId, user.id)]
@@ -45,6 +46,9 @@ export async function GET(request: NextRequest) {
         }
         if (endDate) {
             conditions.push(lte(images.createdAt, new Date(endDate)))
+        }
+        if (isPublic !== null && isPublic === 'true') {
+            conditions.push(eq(images.isPublic, true))
         }
 
         // 전체 개수 조회
