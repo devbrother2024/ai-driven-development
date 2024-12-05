@@ -1,6 +1,6 @@
 'use client'
 
-import { IGalleryImage, IGalleryCardProps } from '@/types'
+import {  IGalleryCardProps } from '@/types'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Share, Trash2 } from 'lucide-react'

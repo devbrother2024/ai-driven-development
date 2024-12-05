@@ -1,12 +1,10 @@
 'use client'
 
 import { Dialog, DialogContent } from '@/components/ui/dialog'
-import { IGalleryImage, IShareModalProps } from '@/types'
+import { IShareModalProps } from '@/types'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
-import { Label } from '@/components/ui/label'
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 
