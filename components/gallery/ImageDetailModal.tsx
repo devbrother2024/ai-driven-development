@@ -12,12 +12,14 @@ interface ImageDetailModalProps {
     image: IGalleryImage | null
     isOpen: boolean
     onClose: () => void
+    isShared?: boolean
 }
 
 export function ImageDetailModal({
     image,
     isOpen,
-    onClose
+    onClose,
+    isShared = false
 }: ImageDetailModalProps) {
     const { updateImage } = useGalleryStore()
     const [tags, setTags] = useState<string[]>([])

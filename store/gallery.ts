@@ -34,7 +34,8 @@ interface GalleryStore {
 }
 
 const defaultFilters: FilterOptions = {
-    sortBy: 'latest'
+    sortBy: 'latest',
+    isPublic: undefined
 }
 
 const ITEMS_PER_PAGE = 12
@@ -211,15 +212,17 @@ export const useGalleryStore = create<GalleryStore>((set, get) => ({
 
             const { image } = await response.json()
 
-            // 성공적으로 업데이트된 경우 로컬 상태 업데이트
+            // 성공적으로 업데이트된 경우 로컬 상태 즉시 업데이트
             const { images, filteredImages } = get()
             const updateImages = (imgs: IGalleryImage[]) =>
-                imgs.map(img => (img.id === imageId ? image : img))
+                imgs.map(img => (img.id === imageId ? { ...img, tags, isPublic } : img))
 
             set({
                 images: updateImages(images),
                 filteredImages: updateImages(filteredImages)
             })
+
+            return image
         } catch (error) {
             set({
                 error:
@@ -227,6 +230,7 @@ export const useGalleryStore = create<GalleryStore>((set, get) => ({
                         ? error.message
                         : '알 수 없는 오류가 발생했습니다.'
             })
+            throw error
         } finally {
             set({ isLoading: false })
         }

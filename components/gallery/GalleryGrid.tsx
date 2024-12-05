@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 import { useGalleryStore } from '@/store/gallery'
 import { GalleryCard } from './GalleryCard'
 import { ImageDetailModal } from './ImageDetailModal'
-import { ShareModal } from './ShareModal'
+import  ShareModal  from './ShareModal'
 import { IGalleryImage } from '@/types'
 
 // 무한 스크롤을 위한 커스텀 훅
@@ -68,8 +68,10 @@ export default function GalleryGrid() {
     }, [])
 
     const handleShareClick = useCallback((image: IGalleryImage) => {
-        setShareImage(image)
-        setIsShareModalOpen(true)
+        if (!image.isPublic) {
+            setShareImage(image)
+            setIsShareModalOpen(true)
+        }
     }, [])
 
     const handleDeleteClick = useCallback(
@@ -126,12 +128,13 @@ export default function GalleryGrid() {
             {/* 공유 모달 */}
             {shareImage && (
                 <ShareModal
-                    image={shareImage}
-                isOpen={isShareModalOpen}
-                onClose={() => {
-                    setIsShareModalOpen(false)
-                    setShareImage(null)
+                    imageId={shareImage.id}
+                    isOpen={isShareModalOpen}
+                    onClose={() => {
+                        setIsShareModalOpen(false)
+                        setShareImage(null)
                     }}
+                    currentTags={shareImage.tags}
                 />
             )}
         </div>
