@@ -80,16 +80,7 @@ export function GalleryCard({
                             {image.isPublic ? '공개' : '비공개'}
                         </span>
                     </div>
-                    <div className="flex flex-wrap gap-1">
-                        {image.categories.map(category => (
-                            <span
-                                key={category}
-                                className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
-                            >
-                                {category}
-                            </span>
-                        ))}
-                    </div>
+                    
                 </div>
             </div>
 

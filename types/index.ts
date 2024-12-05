@@ -87,10 +87,8 @@ export interface IGalleryImage {
         artStyle: string
         colorTone: string
     }
-    categories: string[]
     tags: string[]
     isPublic: boolean
-    order: number
     createdAt: string
     updatedAt: string
 }
@@ -149,4 +147,59 @@ export interface IErrorResponse {
 export interface INavigationItem {
     name: string
     href: string
+}
+
+export interface IGalleryQuery {
+    page: number
+    limit: number
+    artStyle?: string
+    colorTone?: string
+    startDate?: string
+    endDate?: string
+    sortBy?: 'latest' | 'oldest'
+    isPublic?: boolean
+}
+
+export interface IGalleryResponse {
+    images: IGalleryImage[]
+    totalCount: number
+    hasMore: boolean
+}
+
+export interface IUpdateImageRequest {
+    tags?: string[]
+    isPublic?: boolean
+}
+
+export interface IUpdateImageResponse {
+    success: boolean
+    image?: IGalleryImage
+    error?: {
+        code: string
+        message: string
+    }
+}
+
+export interface ISharePostRequest {
+    imageId: number
+    title: string
+    description: string
+    tags: string[]
+}
+
+export interface ISharePostResponse {
+    success: boolean
+    post?: {
+        id: number
+        imageId: number
+        userId: string
+        title: string
+        description: string | null
+        createdAt: Date
+        updatedAt: Date
+    }
+    error?: {
+        code: string
+        message: string
+    }
 }

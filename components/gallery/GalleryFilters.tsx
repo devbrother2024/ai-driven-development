@@ -1,5 +1,8 @@
 'use client'
 
+import { useGalleryStore } from '@/store/gallery'
+import { Button } from '@/components/ui/button'
+import { DatePickerWithRange } from '@/components/ui/date-picker'
 import {
     Select,
     SelectContent,
@@ -7,84 +10,138 @@ import {
     SelectTrigger,
     SelectValue
 } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { DatePickerWithRange } from '@/components/ui/date-picker'
-import { useGalleryStore } from '@/store/gallery'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
 import { DateRange } from 'react-day-picker'
 
-export function GalleryFilters() {
+// 스타일 옵션 상수 정의
+const ART_STYLES = [
+    '전체',
+    '디지털아트',
+    '수채화',
+    '유화',
+    '펜화',
+    '연필화',
+    '로고_미니멀',
+    '로고_3D',
+    '로고_그라디언트',
+    '로고_빈티지',
+    '로고_모던'
+] as const
+
+const COLOR_TONES = [
+    '전체',
+    '밝은',
+    '어두운',
+    '파스텔',
+    '흑백',
+    '컬러풀',
+    '모노톤',
+    '메탈릭'
+] as const
+
+export default function GalleryFilters() {
     const { filters, setFilter, resetFilters } = useGalleryStore()
 
-    const categories = [
-        { value: 'all', label: '전체' },
-        { value: '판타지', label: '판타지' },
-        { value: 'SF', label: 'SF' },
-        { value: '자연', label: '자연' },
-        { value: '일상', label: '일상' }
-    ]
+    const handleStyleChange = (value: string) => {
+        setFilter({ artStyle: value === '전체' ? undefined : value })
+    }
 
-    const sortOptions = [
-        { value: 'latest', label: '최신순' },
-        { value: 'oldest', label: '오래된순' },
-        { value: 'name', label: '이름순' }
-    ]
+    const handleColorToneChange = (value: string) => {
+        setFilter({ colorTone: value === '전체' ? undefined : value })
+    }
+
+    const handleSortChange = (value: string) => {
+        setFilter({ sortBy: value as 'latest' | 'oldest' })
+    }
 
     return (
-        <div className="flex flex-wrap gap-4 items-center">
-            <Select
-                value={filters.category}
-                onValueChange={value => setFilter({ category: value })}
+        <div className="space-y-4 p-4 bg-white rounded-lg shadow">
+            <div className="flex flex-wrap gap-4">
+                {/* 아트 스타일 필터 */}
+                <div className="flex-1 min-w-[200px]">
+                    <Select
+                        value={filters.artStyle || '전체'}
+                        onValueChange={handleStyleChange}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="아트 스타일" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {ART_STYLES.map(style => (
+                                <SelectItem key={style} value={style}>
+                                    {style}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                {/* 색상 톤 필터 */}
+                <div className="flex-1 min-w-[200px]">
+                    <Select
+                        value={filters.colorTone || '전체'}
+                        onValueChange={handleColorToneChange}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="색상 톤" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {COLOR_TONES.map(tone => (
+                                <SelectItem key={tone} value={tone}>
+                                    {tone}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                {/* 날짜 범위 필터 */}
+                <div className="flex-1 min-w-[300px]">
+                    <DatePickerWithRange
+                        value={filters.dateRange}
+                        onChange={(date: DateRange | undefined) =>
+                            setFilter({ dateRange: date })
+                        }
+                    />
+                </div>
+
+                {/* 정렬 옵션 */}
+                <div className="flex-1 min-w-[150px]">
+                    <Select
+                        value={filters.sortBy}
+                        onValueChange={handleSortChange}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="정렬" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="latest">최신순</SelectItem>
+                            <SelectItem value="oldest">오래된순</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+
+                {/* 공개 여부 필터 */}
+                <div className="flex items-center space-x-2">
+                    <Switch
+                        id="public-filter"
+                        checked={filters.isPublic}
+                        onCheckedChange={checked =>
+                            setFilter({ isPublic: checked })
+                        }
+                    />
+                    <Label htmlFor="public-filter">공개된 이미지만 보기</Label>
+                </div>
+            </div>
+
+            {/* 필터 초기화 버튼 */}
+            <Button
+                variant="outline"
+                size="sm"
+                onClick={resetFilters}
+                className="mt-2"
             >
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="카테고리 선택" />
-                </SelectTrigger>
-                <SelectContent>
-                    {categories.map(category => (
-                        <SelectItem key={category.value} value={category.value}>
-                            {category.label}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-
-            <DatePickerWithRange
-                value={filters.dateRange}
-                onChange={(dateRange: DateRange | undefined) =>
-                    setFilter({ dateRange })
-                }
-            />
-
-            <Select
-                value={filters.sortBy}
-                onValueChange={value => setFilter({ sortBy: value })}
-            >
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="정렬 기준" />
-                </SelectTrigger>
-                <SelectContent>
-                    {sortOptions.map(option => (
-                        <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-
-            <Select
-                value={filters.visibility}
-                onValueChange={value => setFilter({ visibility: value })}
-            >
-                <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="공개 설정" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="all">전체</SelectItem>
-                    <SelectItem value="public">공개</SelectItem>
-                    <SelectItem value="private">비공개</SelectItem>
-                </SelectContent>
-            </Select>
-
-            <Button variant="outline" onClick={resetFilters}>
                 필터 초기화
             </Button>
         </div>

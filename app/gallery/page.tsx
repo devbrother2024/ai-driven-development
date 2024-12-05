@@ -1,5 +1,5 @@
-import { GalleryGrid } from '@/components/gallery/GalleryGrid'
-import { GalleryFilters } from '@/components/gallery/GalleryFilters'
+import GalleryGrid from '@/components/gallery/GalleryGrid'
+import GalleryFilters from '@/components/gallery/GalleryFilters'
 
 export default function GalleryPage() {
     return (

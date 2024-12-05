@@ -12,7 +12,7 @@
    - **UI 구성**: 
      - 반응형 그리드 레이아웃 (1/2/3/4열 자동 조정)
      - 각 이미지는 1:1 비율의 카드 형태로 표시
-     - 무한 스크롤 구현 예정 (현재는 정적 목록)
+     - 무한 스크롤 구현
    - **이미지 카드 구성**:
      - 썸네일 이미지 (Next.js Image 컴포넌트)
      - 생성 날짜
@@ -22,13 +22,19 @@
      - 카드 호버 시 액션 버튼 표시 (공유, 삭제)
      - 카드 클릭 시 상세 모달 열기
      - 삭제 시 확인 다이얼로그 표시
+   - **이미지 URL 형식**:
+     - 실제 이미지를 확인할 수 있는 `imageUrl`은 다음 형식을 가집니다:
+       ```
+       ${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images/${filePath}
+       ```
 
 2. **필터 및 정렬 섹션**
    - **파일 위치**: `components/gallery/GalleryFilters.tsx`
    - **UI 구성**:
-     - 카테고리 필터 (Select 컴포넌트)
+     - 아트 스타일 필터 (Select 컴포넌트)
+     - 색상 톤 필터 (Select 컴포넌트)
      - 날짜 범위 필터 (DatePickerWithRange 컴포넌트)
-     - 정렬 옵션 (최신순, 오래된순, 이름순)
+     - 정렬 옵션 (최신순, 오래된순)
      - 공개/비공개 필터
    - **상호작용**:
      - 필터 변경 시 실시간으로 갤러리 목록 업데이트
@@ -42,10 +48,8 @@
      - 스타일 옵션 정보
      - 생성 날짜
      - 태그 관리
-     - 공개/비공개 설정
    - **상호작용**:
      - 태그 추가/삭제
-     - 공개 설정 변경
      - 모달 닫기
 
 4. **커뮤니티 공유 모달**
@@ -58,7 +62,8 @@
    - **상호작용**:
      - 태그 추가/삭제
      - 입력 필드 유효성 검사
-     - 공유 완료 시 토스트 메시지 (예정)
+     - 공유 완료 시 토스트 메시지
+     - 공개/비공개 설정
 
 #### 2. 상태 관리
 
@@ -109,15 +114,27 @@
        interface IGalleryQuery {
            page: number
            limit: number
-           category?: string
+           artStyle?: string
+           colorTone?: string
            startDate?: string
            endDate?: string
-           sortBy?: 'latest' | 'oldest' | 'name'
-           isPublic?: boolean
+           sortBy?: 'latest' | 'oldest'
        }
        ```
      - **응답 데이터**:
        ```typescript
+       interface IGalleryImage {
+           id: number
+           userId: string
+           filePath: string
+           prompt: string
+           artStyle: string
+           colorTone: string
+           tags: string[]
+           createdAt: Date
+           updatedAt: Date
+       }
+
        interface IGalleryResponse {
            images: IGalleryImage[]
            totalCount: number
@@ -143,7 +160,6 @@
        ```typescript
        interface IUpdateImageRequest {
            tags?: string[]
-           isPublic?: boolean
        }
        ```
      - **응답 데이터**:
@@ -161,7 +177,7 @@
 - **요청 데이터**:
   ```typescript
   interface ISharePostRequest {
-      imageId: string
+      imageId: number
       title: string
       description: string
       tags: string[]
@@ -171,50 +187,20 @@
   ```typescript
   interface ISharePostResponse {
       success: boolean
-      postId?: string
+      post?: {
+          id: number
+          imageId: number
+          userId: string
+          title: string
+          description: string
+          createdAt: Date
+          updatedAt: Date
+      }
       error?: string
   }
   ```
 
-#### 3. 데이터베이스 스키마
-
-```typescript
-// GalleryImage 테이블
-{
-  id: string
-  userId: string
-  imageUrl: string
-  prompt: string
-  styleOptions: {
-    artStyle: string
-    colorTone: string
-  }
-  categories: string[]
-  tags: string[]
-  isPublic: boolean
-  order: number
-  createdAt: string
-  updatedAt: string
-}
-
-// Category 테이블
-{
-  id: string
-  userId: string
-  name: string
-  createdAt: string
-}
-
-// Tag 테이블
-{
-  id: string
-  name: string
-  useCount: number
-  createdAt: string
-}
-```
-
-#### 4. 에러 처리
+#### 3. 에러 처리
 
 - **에러 코드**:
   - `INVALID_REQUEST`: 잘못된 요청 파라미터
