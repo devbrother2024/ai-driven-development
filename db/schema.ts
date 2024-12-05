@@ -27,7 +27,8 @@ export const posts = pgTable('posts', {
     id: serial('id').primaryKey(),
     imageId: integer('image_id')
         .notNull()
-        .references(() => images.id, { onDelete: 'cascade' }),
+        .references(() => images.id, { onDelete: 'cascade' })
+        .unique(),
     userId: text('user_id').notNull(), // Clerk user ID
     title: text('title').notNull(),
     description: text('description'),
