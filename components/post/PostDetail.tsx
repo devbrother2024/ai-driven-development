@@ -44,6 +44,7 @@ export function PostDetail({ postId }: PostDetailProps) {
     const [loadingComments, setLoadingComments] = useState(false)
     const [newComment, setNewComment] = useState('')
     const [submitting, setSubmitting] = useState(false)
+    const [likeLoading, setLikeLoading] = useState(false)
     const { toast } = useToast()
 
     // 게시물 상세 정보 로드
@@ -148,6 +149,47 @@ export function PostDetail({ postId }: PostDetailProps) {
         }
     }
 
+    // 좋아요 �글 처리
+    const handleLikeToggle = async () => {
+        if (!post || likeLoading) return
+
+        try {
+            setLikeLoading(true)
+            const response = await fetch(`/api/post/${postId}/like`, {
+                method: 'POST'
+            })
+
+            const data = await response.json()
+
+            if (!response.ok) {
+                throw new Error(
+                    data.error?.message || '좋아요 처리 중 오류가 발생했습니다.'
+                )
+            }
+
+            // 게시물 상태 업데이트
+            setPost(prev => {
+                if (!prev) return null
+                return {
+                    ...prev,
+                    isLiked: data.isLiked,
+                    likes: data.likes
+                }
+            })
+        } catch (error) {
+            toast({
+                variant: 'destructive',
+                title: '오류 발생',
+                description:
+                    error instanceof Error
+                        ? error.message
+                        : '좋아요 처리 중 오류가 발생했습니다.'
+            })
+        } finally {
+            setLikeLoading(false)
+        }
+    }
+
     useEffect(() => {
         loadPostDetail()
         loadComments()
@@ -219,13 +261,15 @@ export function PostDetail({ postId }: PostDetailProps) {
                             variant="ghost"
                             size="sm"
                             className="flex items-center gap-2"
+                            onClick={handleLikeToggle}
+                            disabled={likeLoading}
                         >
                             <Heart
-                                className={
+                                className={`transition-colors ${
                                     post.isLiked
                                         ? 'fill-red-500 text-red-500'
                                         : ''
-                                }
+                                }`}
                             />
                             <span>{post.likes}</span>
                         </Button>

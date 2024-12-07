@@ -153,25 +153,44 @@
   }
   ```
 
-#### 4. 좋아요 관리 API ❗TODO
+#### 4. 좋아요 관리 API ✅ 구현됨
 
 - **파일 위치**: `app/api/post/[postId]/like/route.ts`
-- **HTTP 메서드**: `POST`
+- **HTTP 메서드**: 
+  - `POST`: 좋아요 토글 (추가/취소)
+  - `GET`: 좋아요 상태 조회
+
+**POST 메서드 (좋아요 토글)**
 - **요청 데이터**: 없음 (postId는 URL 파라미터로 전달)
 - **응답 데이터**: 
   ```typescript
   {
     success: boolean;
-    likes: number;
-    isLiked: boolean;
+    likes: number;      // 전체 좋아요 수
+    isLiked: boolean;   // 토글 후 좋아요 상태
     error?: {
-      code: string;
+      code: string;     // UNAUTHORIZED | POST_NOT_FOUND | INTERNAL_SERVER_ERROR
       message: string;
     };
   }
   ```
 
-#### 5. 댓글 관리 API ❗TODO
+**GET 메서드 (좋아요 상태 조회)**
+- **요청 데이터**: 없음 (postId는 URL 파라미터로 전달)
+- **응답 데이터**: 
+  ```typescript
+  {
+    success: boolean;
+    likes: number;      // 전체 좋아요 수
+    isLiked: boolean;   // 현재 사용자의 좋아요 상태
+    error?: {
+      code: string;     // UNAUTHORIZED | INTERNAL_SERVER_ERROR
+      message: string;
+    };
+  }
+  ```
+
+#### 5. 댓글 관리 API ✅ 구현됨
 
 - **파일 위치**: `app/api/post/[postId]/comments/route.ts`
 - **HTTP 메서드**: 
