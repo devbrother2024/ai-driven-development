@@ -74,39 +74,65 @@ export function CommunityFeedCard({ post }: CommunityFeedCardProps) {
     return (
         <>
             <div
-                className="group overflow-hidden rounded-lg border border-purple-600/20 
-                         bg-gray-800/30 backdrop-blur-sm hover:bg-gray-800/50 
-                         transition-all duration-300 cursor-pointer"
-                onClick={handleClick}
+                className="overflow-hidden rounded-xl border border-purple-600/10 
+                         bg-gradient-to-b from-gray-900/90 to-gray-950/90 
+                         shadow-lg"
             >
-                <div className="relative aspect-square overflow-hidden">
+                <div
+                    className="group relative aspect-square overflow-hidden cursor-pointer"
+                    onClick={handleClick}
+                >
                     <Image
                         src={post.imageURL}
                         alt={post.prompt || '생성된 이미지'}
                         fill
-                        className="object-cover transition-transform duration-300 
+                        className="object-cover transition-transform duration-500 
                                  group-hover:scale-105"
+                    />
+                    <div
+                        className="absolute inset-0 bg-gradient-to-t from-gray-950 
+                                  via-transparent to-transparent opacity-0 
+                                  group-hover:opacity-100 transition-opacity duration-300"
+                    />
+                    <div
+                        className="absolute inset-0 bg-gradient-to-b from-gray-950/40 
+                                  via-transparent to-transparent"
+                    />
+
+                    <div
+                        className="absolute inset-0 ring-1 ring-inset ring-white/10 
+                                 group-hover:ring-purple-600/20 transition-all duration-300"
                     />
                 </div>
 
-                <div className="p-4 space-y-4">
+                <div className="p-4 space-y-4 backdrop-blur-sm bg-gray-800">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <Avatar className="w-8 h-8 ring-2 ring-purple-600/30">
+                            <Avatar
+                                className="w-9 h-9 ring-2 ring-purple-600/30 
+                                           shadow-lg"
+                            >
                                 <AvatarImage src={post.userProfile} />
-                                <AvatarFallback className="bg-purple-600/20">
+                                <AvatarFallback
+                                    className="bg-purple-600/20 
+                                             text-purple-300"
+                                >
                                     {post.userName[0]}
                                 </AvatarFallback>
                             </Avatar>
-                            <span className="font-medium text-sm text-gray-200">
+                            <span
+                                className="font-medium text-sm text-gray-100 
+                                         tracking-wide"
+                            >
                                 {post.userName}
                             </span>
                         </div>
-                        
+
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="text-gray-400 hover:text-purple-400"
+                            className="text-gray-300 hover:text-purple-300 
+                                   hover:bg-purple-600/20 transition-colors"
                         >
                             <Share2 className="h-4 w-4" />
                         </Button>
@@ -116,27 +142,35 @@ export function CommunityFeedCard({ post }: CommunityFeedCardProps) {
                         <Button
                             variant="ghost"
                             size="sm"
-                            className={`flex items-center gap-2 transition-colors
-                                    ${isLiked ? 'text-purple-400' : 'text-gray-400'}`}
+                            className={`flex items-center gap-2 transition-all
+                                    hover:bg-purple-600/20
+                                    ${
+                                        isLiked
+                                            ? 'text-purple-300'
+                                            : 'text-gray-300'
+                                    }`}
                             onClick={handleLikeClick}
                             disabled={isLoading}
                         >
                             <Heart
-                                className={`transition-colors ${
-                                    isLiked ? 'fill-purple-400' : ''
-                                }`}
+                                className={`transition-all duration-300
+                                        ${
+                                            isLiked
+                                                ? 'fill-purple-300 scale-110'
+                                                : ''
+                                        }`}
                             />
-                            <span>{likeCount}</span>
+                            <span className="font-medium">{likeCount}</span>
                         </Button>
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="flex items-center gap-2 text-gray-400 
-                                     hover:text-purple-400"
+                            className="flex items-center gap-2 text-gray-300 
+                                   hover:text-purple-300 hover:bg-purple-600/20"
                             onClick={handleCommentsClick}
                         >
                             <MessageCircle />
-                            <span>{post.comments}</span>
+                            <span className="font-medium">{post.comments}</span>
                         </Button>
                     </div>
                 </div>
