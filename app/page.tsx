@@ -15,7 +15,7 @@ export default function Home() {
                         <div className="relative inline-block">
                             <div className="absolute inset-0 bg-purple-600/30 blur-3xl rounded-full" />
                             <h1 className="text-4xl md:text-6xl font-bold relative bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
-                                AI로 상상을 현실로
+                                상상력을 현실로 바꾸는 AI
                             </h1>
                         </div>
 
