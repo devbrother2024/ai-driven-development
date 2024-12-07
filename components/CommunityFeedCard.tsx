@@ -1,84 +1,81 @@
 'use client'
 
-import { ICommunityFeedCardProps } from '@/types'
-import { Card, CardContent } from '@/components/ui/card'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { Heart, MessageCircle } from 'lucide-react'
-import Link from 'next/link'
-import { useState } from 'react'
-import { CommentsModal } from './CommentsModal'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { IPost } from '@/types'
 
-export function CommunityFeedCard({
-    post: initialPost
-}: ICommunityFeedCardProps) {
-    const [post, setPost] = useState(initialPost)
-    const [isCommentsOpen, setIsCommentsOpen] = useState(false)
+interface CommunityFeedCardProps {
+    post: IPost
+}
 
-    const handleLikeClick = (e: React.MouseEvent) => {
-        e.preventDefault() // Link 컴포넌트의 기본 동작 방지
-        setPost(prev => ({
-            ...prev,
-            likes: prev.isLiked ? prev.likes - 1 : prev.likes + 1,
-            isLiked: !prev.isLiked
-        }))
-    }
+export function CommunityFeedCard({ post }: CommunityFeedCardProps) {
+    const router = useRouter()
 
-    const handleCommentsClick = (e: React.MouseEvent) => {
-        e.preventDefault() // Link 컴포넌트의 기본 동작 방지
-        setIsCommentsOpen(true)
+    const handleClick = () => {
+        router.push(`/post/${post.postId}`)
     }
 
     return (
-        <>
-            <Link href={`/post/${post.postId}`}>
-                <Card className="overflow-hidden transition-all hover:scale-[1.02] hover:shadow-lg">
-                    <div className="relative aspect-square">
-                        <Image
-                            src={post.imageURL}
-                            alt="Generated Image"
-                            fill
-                            className="object-cover"
+        <div
+            className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+            onClick={handleClick}
+        >
+            {/* 이미지 */}
+            <div className="relative aspect-square">
+                <Image
+                    src={post.imageURL}
+                    alt={post.prompt || '생성된 이미지'}
+                    fill
+                    className="object-cover"
+                />
+            </div>
+
+            {/* 하단 정보 */}
+            <div className="p-4 space-y-4">
+                {/* 작성자 정보 */}
+                <div className="flex items-center gap-3">
+                    <Avatar className="w-8 h-8">
+                        <AvatarImage src={post.userProfile} />
+                        <AvatarFallback>{post.userName[0]}</AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium text-sm">{post.userName}</span>
+                </div>
+
+                {/* 상호작용 */}
+                <div className="flex items-center gap-4">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center gap-2"
+                        onClick={e => {
+                            e.stopPropagation() // 카드 클릭 이벤트 전파 방지
+                            // 좋아요 기능 구현 예정
+                        }}
+                    >
+                        <Heart
+                            className={
+                                post.isLiked ? 'fill-red-500 text-red-500' : ''
+                            }
                         />
-                    </div>
-                    <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                            <span className="font-medium">{post.userName}</span>
-                            <div className="flex items-center gap-4">
-                                <button
-                                    onClick={handleLikeClick}
-                                    className="flex items-center gap-1"
-                                >
-                                    <Heart
-                                        size={16}
-                                        className={
-                                            post.isLiked
-                                                ? 'fill-red-500 text-red-500'
-                                                : ''
-                                        }
-                                    />
-                                    <span className="text-sm">
-                                        {post.likes}
-                                    </span>
-                                </button>
-                                <button
-                                    onClick={handleCommentsClick}
-                                    className="flex items-center gap-1"
-                                >
-                                    <MessageCircle size={16} />
-                                    <span className="text-sm">
-                                        {post.comments}
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </Link>
-            <CommentsModal
-                postId={post.postId}
-                isOpen={isCommentsOpen}
-                onClose={() => setIsCommentsOpen(false)}
-            />
-        </>
+                        <span>{post.likes}</span>
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="flex items-center gap-2"
+                        onClick={e => {
+                            e.stopPropagation() // 카드 클릭 이벤트 전파 방지
+                            // 댓글 기능 구현 예정
+                        }}
+                    >
+                        <MessageCircle />
+                        <span>{post.comments}</span>
+                    </Button>
+                </div>
+            </div>
+        </div>
     )
 }
