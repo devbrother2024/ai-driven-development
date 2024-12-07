@@ -77,24 +77,39 @@ function CommunityFeed() {
 
     if (!posts || posts.length === 0) {
         return (
-            <div className="w-full max-w-7xl text-center py-12">
-                <h2 className="text-2xl font-semibold mb-4">커뮤니티 피드</h2>
-                <p className="text-muted-foreground">
-                    아직 공유된 이미지가 없습니다.
-                </p>
+            <div className="w-full max-w-7xl mx-auto">
+                <div className="flex flex-col items-center justify-center py-24">
+                    <div className="relative inline-block mb-6">
+                        <div className="absolute inset-0 bg-purple-600/30 blur-3xl rounded-full" />
+                        <h2 className="text-3xl font-bold relative bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
+                            커뮤니티 피드
+                        </h2>
+                    </div>
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-purple-600/5 blur-lg rounded-lg" />
+                        <div className="relative bg-gray-800/30 backdrop-blur-sm border border-purple-600/20 rounded-lg px-8 py-6">
+                            <p className="text-gray-300 text-lg">
+                                아직 공유된 이미지가 없습니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
 
     return (
-        <section className="w-full max-w-7xl">
+        <section className="w-full max-w-7xl mx-auto">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold">커뮤니티 피드</h2>
-                <p className="text-muted-foreground">
-                    총 {totalCount}개의 이미지
-                </p>
+                <h2 className="relative inline-block">
+                    <div className="absolute inset-0 bg-purple-600/30 blur-3xl rounded-full" />
+                    <span className="text-2xl font-bold relative bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
+                        커뮤니티 피드
+                    </span>
+                </h2>
+                <p className="text-gray-300">총 {totalCount}개의 이미지</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {posts.map((post: IPost) => (
                     <CommunityFeedCard key={post.postId} post={post} />
                 ))}

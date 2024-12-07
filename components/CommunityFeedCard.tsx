@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { Heart, MessageCircle } from 'lucide-react'
+import { Heart, MessageCircle, Share2 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { IPost } from '@/types'
@@ -74,44 +74,56 @@ export function CommunityFeedCard({ post }: CommunityFeedCardProps) {
     return (
         <>
             <div
-                className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+                className="group overflow-hidden rounded-lg border border-purple-600/20 
+                         bg-gray-800/30 backdrop-blur-sm hover:bg-gray-800/50 
+                         transition-all duration-300 cursor-pointer"
                 onClick={handleClick}
             >
-                {/* 이미지 */}
-                <div className="relative aspect-square">
+                <div className="relative aspect-square overflow-hidden">
                     <Image
                         src={post.imageURL}
                         alt={post.prompt || '생성된 이미지'}
                         fill
-                        className="object-cover"
+                        className="object-cover transition-transform duration-300 
+                                 group-hover:scale-105"
                     />
                 </div>
 
-                {/* 하단 정보 */}
                 <div className="p-4 space-y-4">
-                    {/* 작성자 정보 */}
-                    <div className="flex items-center gap-3">
-                        <Avatar className="w-8 h-8">
-                            <AvatarImage src={post.userProfile} />
-                            <AvatarFallback>{post.userName[0]}</AvatarFallback>
-                        </Avatar>
-                        <span className="font-medium text-sm">
-                            {post.userName}
-                        </span>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <Avatar className="w-8 h-8 ring-2 ring-purple-600/30">
+                                <AvatarImage src={post.userProfile} />
+                                <AvatarFallback className="bg-purple-600/20">
+                                    {post.userName[0]}
+                                </AvatarFallback>
+                            </Avatar>
+                            <span className="font-medium text-sm text-gray-200">
+                                {post.userName}
+                            </span>
+                        </div>
+                        
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-gray-400 hover:text-purple-400"
+                        >
+                            <Share2 className="h-4 w-4" />
+                        </Button>
                     </div>
 
-                    {/* 상호작용 */}
                     <div className="flex items-center gap-4">
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="flex items-center gap-2"
+                            className={`flex items-center gap-2 transition-colors
+                                    ${isLiked ? 'text-purple-400' : 'text-gray-400'}`}
                             onClick={handleLikeClick}
                             disabled={isLoading}
                         >
                             <Heart
                                 className={`transition-colors ${
-                                    isLiked ? 'fill-red-500 text-red-500' : ''
+                                    isLiked ? 'fill-purple-400' : ''
                                 }`}
                             />
                             <span>{likeCount}</span>
@@ -119,7 +131,8 @@ export function CommunityFeedCard({ post }: CommunityFeedCardProps) {
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 text-gray-400 
+                                     hover:text-purple-400"
                             onClick={handleCommentsClick}
                         >
                             <MessageCircle />

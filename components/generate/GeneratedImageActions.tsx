@@ -64,16 +64,25 @@ export function GeneratedImageActions({
     }
 
     return (
-        <div className="flex gap-2">
-            <Button onClick={handleSave} variant="outline">
+        <div className="flex flex-wrap gap-3">
+            <Button
+                onClick={handleSave}
+                className="flex-1 min-w-[200px] bg-purple-600 hover:bg-purple-700 text-white"
+            >
                 <Save className="mr-2 h-4 w-4" />
                 갤러리에 저장하기
             </Button>
-            <Button onClick={handleShare} variant="outline">
+            <Button
+                onClick={handleShare}
+                className="flex-1 min-w-[200px] bg-purple-600 hover:bg-purple-700 text-white"
+            >
                 <Share2 className="mr-2 h-4 w-4" />
                 공유하기
             </Button>
-            <Button onClick={handleDownload} variant="outline">
+            <Button
+                onClick={handleDownload}
+                className="flex-1 min-w-[200px] bg-purple-600 hover:bg-purple-700 text-white"
+            >
                 <Download className="mr-2 h-4 w-4" />
                 다운로드
             </Button>

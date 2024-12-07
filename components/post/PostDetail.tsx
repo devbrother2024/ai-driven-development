@@ -149,7 +149,7 @@ export function PostDetail({ postId }: PostDetailProps) {
         }
     }
 
-    // 좋아요 �글 처리
+    // 좋아요 글 처리
     const handleLikeToggle = async () => {
         if (!post || likeLoading) return
 
@@ -200,10 +200,10 @@ export function PostDetail({ postId }: PostDetailProps) {
     }
 
     return (
-        <div className="w-full max-w-7xl">
+        <div className="w-full max-w-7xl mx-auto">
             <Link
                 href="/"
-                className="inline-flex items-center gap-2 mb-8 text-muted-foreground hover:text-foreground"
+                className="inline-flex items-center gap-2 mb-8 text-gray-400 hover:text-purple-400 transition-colors"
             >
                 <ArrowLeft className="w-4 h-4" />
                 <span>돌아가기</span>
@@ -212,7 +212,7 @@ export function PostDetail({ postId }: PostDetailProps) {
             <div className="flex flex-col md:flex-row gap-8">
                 {/* 이미지 영역 */}
                 <div className="flex-1">
-                    <div className="relative aspect-square rounded-lg overflow-hidden">
+                    <div className="relative aspect-square rounded-lg overflow-hidden ring-2 ring-purple-600/20">
                         <Image
                             src={post.imageURL}
                             alt={post.title || '생성된 이미지'}
@@ -227,13 +227,17 @@ export function PostDetail({ postId }: PostDetailProps) {
                 <div className="flex-1 flex flex-col gap-6">
                     {/* 작성자 정보 */}
                     <div className="flex items-center gap-4">
-                        <Avatar>
+                        <Avatar className="ring-2 ring-purple-600/30">
                             <AvatarImage src={post.userProfile} />
-                            <AvatarFallback>{post.userName[0]}</AvatarFallback>
+                            <AvatarFallback className="bg-purple-600/20 text-gray-200">
+                                {post.userName[0]}
+                            </AvatarFallback>
                         </Avatar>
                         <div>
-                            <h2 className="font-medium">{post.userName}</h2>
-                            <p className="text-sm text-muted-foreground">
+                            <h2 className="font-medium text-gray-200">
+                                {post.userName}
+                            </h2>
+                            <p className="text-sm text-gray-400">
                                 {new Date(post.createdAt).toLocaleDateString()}
                             </p>
                         </div>
@@ -241,18 +245,20 @@ export function PostDetail({ postId }: PostDetailProps) {
 
                     {/* 제목과 설명 */}
                     {post.title && (
-                        <h1 className="text-2xl font-bold">{post.title}</h1>
+                        <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-purple-400">
+                            {post.title}
+                        </h1>
                     )}
                     {post.description && (
-                        <p className="text-muted-foreground">
-                            {post.description}
-                        </p>
+                        <p className="text-gray-300">{post.description}</p>
                     )}
 
                     {/* 프롬프트 */}
-                    <div className="p-4 bg-muted rounded-lg">
-                        <h3 className="font-medium mb-2">프롬프트</h3>
-                        <p className="text-sm">{post.prompt}</p>
+                    <div className="p-4 bg-gray-800/50 border border-purple-600/20 backdrop-blur-sm rounded-lg">
+                        <h3 className="font-medium text-gray-200 mb-2">
+                            프롬프트
+                        </h3>
+                        <p className="text-sm text-gray-300">{post.prompt}</p>
                     </div>
 
                     {/* 상호작용 버튼 */}
@@ -260,14 +266,14 @@ export function PostDetail({ postId }: PostDetailProps) {
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 text-gray-300 hover:text-purple-400"
                             onClick={handleLikeToggle}
                             disabled={likeLoading}
                         >
                             <Heart
                                 className={`transition-colors ${
                                     post.isLiked
-                                        ? 'fill-red-500 text-red-500'
+                                        ? 'fill-purple-500 text-purple-500'
                                         : ''
                                 }`}
                             />
@@ -276,7 +282,7 @@ export function PostDetail({ postId }: PostDetailProps) {
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 text-gray-300 hover:text-purple-400"
                         >
                             <MessageCircle />
                             <span>{post.comments}</span>
@@ -284,7 +290,7 @@ export function PostDetail({ postId }: PostDetailProps) {
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="flex items-center gap-2"
+                            className="flex items-center gap-2 text-gray-300 hover:text-purple-400"
                         >
                             <Share2 />
                             <span>공유</span>
@@ -302,10 +308,14 @@ export function PostDetail({ postId }: PostDetailProps) {
                                     if (e.key === 'Enter') handleAddComment()
                                 }}
                                 disabled={submitting}
+                                className="bg-gray-900/50 border-purple-600/30 text-gray-200 
+                                         placeholder-gray-400 focus:border-purple-500 
+                                         focus:ring-purple-500/30"
                             />
                             <Button
                                 onClick={handleAddComment}
                                 disabled={submitting}
+                                className="bg-purple-600 hover:bg-purple-700 text-white"
                             >
                                 {submitting ? (
                                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -314,44 +324,46 @@ export function PostDetail({ postId }: PostDetailProps) {
                                 )}
                             </Button>
                         </div>
-                        <ScrollArea className="h-[300px]">
+                        <ScrollArea className="h-[300px] pr-4">
                             {loadingComments ? (
                                 <div className="flex justify-center items-center h-[200px]">
-                                    <Loader2 className="h-6 w-6 animate-spin" />
+                                    <Loader2 className="h-6 w-6 animate-spin text-purple-400" />
                                 </div>
                             ) : comments.length > 0 ? (
                                 comments.map(comment => (
                                     <div
                                         key={comment.id}
-                                        className="mb-4 p-3 bg-muted rounded-lg"
+                                        className="mb-4 p-3 bg-gray-800/50 border border-purple-600/20 
+                                                 backdrop-blur-sm rounded-lg hover:bg-gray-800/70 
+                                                 transition-colors"
                                     >
                                         <div className="flex items-center gap-2 mb-2">
-                                            <Avatar className="w-6 h-6">
+                                            <Avatar className="w-6 h-6 ring-2 ring-purple-600/30">
                                                 <AvatarImage
                                                     src={comment.userProfile}
                                                 />
-                                                <AvatarFallback>
+                                                <AvatarFallback className="bg-purple-600/20 text-gray-200">
                                                     {comment.userName[0]}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div className="flex justify-between items-center w-full">
-                                                <span className="font-medium text-sm">
+                                                <span className="font-medium text-sm text-gray-200">
                                                     {comment.userName}
                                                 </span>
-                                                <span className="text-xs text-muted-foreground">
+                                                <span className="text-xs text-gray-400">
                                                     {new Date(
                                                         comment.createdAt
                                                     ).toLocaleDateString()}
                                                 </span>
                                             </div>
                                         </div>
-                                        <p className="text-sm pl-8">
+                                        <p className="text-sm pl-8 text-gray-300">
                                             {comment.content}
                                         </p>
                                     </div>
                                 ))
                             ) : (
-                                <div className="flex justify-center items-center h-[200px] text-muted-foreground">
+                                <div className="flex justify-center items-center h-[200px] text-gray-400">
                                     아직 댓글이 없습니다.
                                 </div>
                             )}

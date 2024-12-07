@@ -103,9 +103,11 @@ export function CommentsModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] bg-gray-900/95 border-purple-600/20 text-gray-200">
                 <DialogHeader>
-                    <DialogTitle>댓글</DialogTitle>
+                    <DialogTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
+                        댓글
+                    </DialogTitle>
                 </DialogHeader>
                 <div className="flex gap-2 mb-4">
                     <Input
@@ -116,8 +118,15 @@ export function CommentsModal({
                             if (e.key === 'Enter') handleAddComment()
                         }}
                         disabled={submitting}
+                        className="bg-gray-900/50 border-purple-600/30 text-gray-200 
+                                 placeholder-gray-400 focus:border-purple-500 
+                                 focus:ring-purple-500/30"
                     />
-                    <Button onClick={handleAddComment} disabled={submitting}>
+                    <Button
+                        onClick={handleAddComment}
+                        disabled={submitting}
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                    >
                         {submitting ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
@@ -128,41 +137,43 @@ export function CommentsModal({
                 <ScrollArea className="h-[300px] pr-4">
                     {loading ? (
                         <div className="flex justify-center items-center h-full">
-                            <Loader2 className="h-6 w-6 animate-spin" />
+                            <Loader2 className="h-6 w-6 animate-spin text-purple-400" />
                         </div>
                     ) : comments.length > 0 ? (
                         comments.map(comment => (
                             <div
                                 key={comment.id}
-                                className="mb-4 p-3 bg-muted rounded-lg"
+                                className="mb-4 p-3 bg-gray-800/50 border border-purple-600/20 
+                                         backdrop-blur-sm rounded-lg hover:bg-gray-800/70 
+                                         transition-colors"
                             >
                                 <div className="flex items-center gap-2 mb-2">
-                                    <Avatar className="w-6 h-6">
+                                    <Avatar className="w-6 h-6 ring-2 ring-purple-600/30">
                                         <AvatarImage
                                             src={comment.userProfile}
                                         />
-                                        <AvatarFallback>
+                                        <AvatarFallback className="bg-purple-600/20 text-gray-200">
                                             {comment.userName[0]}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div className="flex justify-between items-center w-full">
-                                        <span className="font-medium text-sm">
+                                        <span className="font-medium text-sm text-gray-200">
                                             {comment.userName}
                                         </span>
-                                        <span className="text-xs text-muted-foreground">
+                                        <span className="text-xs text-gray-400">
                                             {new Date(
                                                 comment.createdAt
                                             ).toLocaleDateString()}
                                         </span>
                                     </div>
                                 </div>
-                                <p className="text-sm pl-8">
+                                <p className="text-sm pl-8 text-gray-300">
                                     {comment.content}
                                 </p>
                             </div>
                         ))
                     ) : (
-                        <div className="flex justify-center items-center h-full text-muted-foreground">
+                        <div className="flex justify-center items-center h-full text-gray-400">
                             아직 댓글이 없습니다.
                         </div>
                     )}

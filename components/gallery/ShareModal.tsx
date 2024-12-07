@@ -78,7 +78,7 @@ export default function ShareModal({
                 description:
                     error instanceof Error
                         ? error.message
-                        : '알 수 없는 오류가 발생했습니다.'
+                        : '알 수 없는 오류가 발생��습니다.'
             })
         } finally {
             setIsSubmitting(false)
@@ -87,47 +87,65 @@ export default function ShareModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px] bg-gray-900/95 border-purple-600/20 text-gray-200">
                 <DialogHeader>
-                    <DialogTitle>커뮤니티에 공유하기</DialogTitle>
+                    <DialogTitle className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
+                        커뮤니티에 공유하기
+                    </DialogTitle>
                 </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
-                        <Label htmlFor="title">제목</Label>
+                        <Label htmlFor="title" className="text-gray-200">
+                            제목
+                        </Label>
                         <Input
                             id="title"
                             value={title}
                             onChange={e => setTitle(e.target.value)}
                             placeholder="제목을 입력하세요"
+                            className="bg-gray-900/50 border-purple-600/30 text-gray-200 
+                                     placeholder-gray-400 focus:border-purple-500 
+                                     focus:ring-purple-500/30"
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="description">설명</Label>
+                        <Label htmlFor="description" className="text-gray-200">
+                            설명
+                        </Label>
                         <Textarea
                             id="description"
                             value={description}
                             onChange={e => setDescription(e.target.value)}
                             placeholder="설명을 입력하세요"
+                            className="bg-gray-900/50 border-purple-600/30 text-gray-200 
+                                     placeholder-gray-400 focus:border-purple-500 
+                                     focus:ring-purple-500/30 min-h-[100px]"
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label>태그</Label>
+                        <Label className="text-gray-200">태그</Label>
                         <TagInput
                             value={tags}
                             onChange={setTags}
                             placeholder="태그를 입력하고 Enter를 누르세요"
+                            className="bg-gray-900/50 border-purple-600/30 text-gray-200"
                         />
                     </div>
-                    <div className="flex justify-end space-x-2">
+                    <div className="flex justify-end space-x-2 pt-2">
                         <Button
                             type="button"
                             variant="outline"
                             onClick={onClose}
                             disabled={isSubmitting}
+                            className="border-purple-600/30 text-gray-200 hover:bg-purple-600/20"
                         >
                             취소
                         </Button>
-                        <Button type="submit" disabled={isSubmitting}>
+                        <Button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="bg-purple-600 hover:bg-purple-700 text-white"
+                        >
                             {isSubmitting ? '공유 중...' : '공유하기'}
                         </Button>
                     </div>

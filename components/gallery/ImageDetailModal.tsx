@@ -61,47 +61,54 @@ export function ImageDetailModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-3xl">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <DialogContent className="max-w-3xl bg-gray-900/95 border-purple-600/20 text-gray-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* 이미지 섹션 */}
                     <div className="relative aspect-square">
                         <img
                             src={image.imageUrl}
                             alt={image.prompt}
-                            className="object-cover rounded-lg w-full h-full"
+                            className="object-cover rounded-lg w-full h-full ring-2 ring-purple-600/20"
                         />
                     </div>
 
                     {/* 정보 섹션 */}
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                         <div>
-                            <h3 className="font-semibold">프롬프트</h3>
-                            <p className="text-sm text-gray-600">
+                            <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
+                                프롬프트
+                            </h3>
+                            <p className="mt-2 text-sm text-gray-300">
                                 {image.prompt}
                             </p>
                         </div>
 
                         <div>
-                            <h3 className="font-semibold">스타일 옵션</h3>
-                            <p className="text-sm text-gray-600">
-                                아트 스타일: {image.styleOptions.artStyle}
-                                <br />
-                                색상 톤: {image.styleOptions.colorTone}
-                            </p>
+                            <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
+                                스타일 옵션
+                            </h3>
+                            <div className="mt-2 space-y-1 text-sm text-gray-300">
+                                <p>
+                                    아트 스타일: {image.styleOptions.artStyle}
+                                </p>
+                                <p>색상 톤: {image.styleOptions.colorTone}</p>
+                            </div>
                         </div>
 
                         <div>
-                            <h3 className="font-semibold">태그</h3>
+                            <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
+                                태그
+                            </h3>
                             <div className="flex flex-wrap gap-2 mt-2">
                                 {tags.map(tag => (
                                     <span
                                         key={tag}
-                                        className="px-2 py-1 bg-gray-100 rounded-full text-sm flex items-center gap-1"
+                                        className="px-2 py-1 bg-gray-800/50 border border-purple-600/20 rounded-full text-sm text-gray-200 flex items-center gap-1"
                                     >
                                         {tag}
                                         <button
                                             onClick={() => handleRemoveTag(tag)}
-                                            className="text-gray-500 hover:text-red-500"
+                                            className="text-gray-400 hover:text-red-400 transition-colors"
                                             type="button"
                                         >
                                             ×
@@ -109,28 +116,40 @@ export function ImageDetailModal({
                                     </span>
                                 ))}
                             </div>
-                            <div className="flex gap-2 mt-2">
+                            <div className="flex gap-2 mt-3">
                                 <Input
                                     value={newTag}
                                     onChange={e => setNewTag(e.target.value)}
                                     placeholder="새 태그 추가"
                                     onKeyPress={handleKeyPress}
+                                    className="bg-gray-900/50 border-purple-600/30 text-gray-200 
+                                             placeholder-gray-400 focus:border-purple-500 
+                                             focus:ring-purple-500/30"
                                 />
-                                <Button onClick={handleAddTag} type="button">
+                                <Button
+                                    onClick={handleAddTag}
+                                    type="button"
+                                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                                >
                                     추가
                                 </Button>
                             </div>
                         </div>
 
-                        <div className="flex justify-end gap-2 mt-4">
+                        <div className="flex justify-end gap-2 pt-4">
                             <Button
                                 variant="outline"
                                 onClick={onClose}
                                 type="button"
+                                className="border-purple-600/30 text-gray-200 hover:bg-purple-600/20"
                             >
                                 취소
                             </Button>
-                            <Button onClick={handleSave} type="button">
+                            <Button
+                                onClick={handleSave}
+                                type="button"
+                                className="bg-purple-600 hover:bg-purple-700 text-white"
+                            >
                                 저장
                             </Button>
                         </div>

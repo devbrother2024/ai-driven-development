@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 import { useGalleryStore } from '@/store/gallery'
 import { GalleryCard } from './GalleryCard'
 import { ImageDetailModal } from './ImageDetailModal'
-import  ShareModal  from './ShareModal'
+import ShareModal from './ShareModal'
 import { IGalleryImage } from '@/types'
 
 // 무한 스크롤을 위한 커스텀 훅
@@ -85,7 +85,7 @@ export default function GalleryGrid() {
 
     if (error) {
         return (
-            <div className="flex justify-center items-center h-48 text-red-500">
+            <div className="flex justify-center items-center h-48 text-red-400 bg-red-500/10 rounded-lg border border-red-500/20 backdrop-blur-sm">
                 {error}
             </div>
         )
@@ -93,7 +93,7 @@ export default function GalleryGrid() {
 
     return (
         <div className="relative">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {filteredImages.map(image => (
                     <GalleryCard
                         key={image.id}
@@ -108,7 +108,7 @@ export default function GalleryGrid() {
             {/* 로딩 상태 표시 */}
             {isLoading && (
                 <div className="flex justify-center items-center h-24">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900" />
+                    <div className="animate-spin rounded-full h-8 w-8 border-2 border-purple-600 border-t-transparent" />
                 </div>
             )}
 

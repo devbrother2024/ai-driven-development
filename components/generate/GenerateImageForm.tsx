@@ -98,40 +98,68 @@ export function GenerateImageForm() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8">
             <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-base font-medium text-gray-200 mb-3">
                     프롬프트 입력
                 </label>
                 <Textarea
                     value={prompt}
                     onChange={e => handlePromptChange(e.target.value)}
                     placeholder="생성하고 싶은 이미지를 자세히 설명해주세요..."
-                    className="min-h-[100px]"
+                    className="min-h-[120px] bg-gray-900/50 border-purple-600/30 
+                             text-gray-200 placeholder-gray-400 
+                             focus:border-purple-500 focus:ring-purple-500/30
+                             resize-none"
                     disabled={isGenerating}
                 />
                 {error && (
-                    <Alert variant="destructive" className="mt-2">
-                        <AlertDescription>{error}</AlertDescription>
+                    <Alert
+                        variant="destructive"
+                        className="mt-3 bg-red-500/10 border-red-500/50"
+                    >
+                        <AlertDescription className="text-red-400">
+                            {error}
+                        </AlertDescription>
                     </Alert>
                 )}
             </div>
 
-            <StyleOptions options={styleOptions} onChange={setStyleOptions} />
+            <div className="space-y-6">
+                <div className="relative">
+                    <div className="absolute inset-0 bg-purple-600/5 blur-lg rounded-lg" />
+                    <div className="relative bg-gray-900/30 backdrop-blur-sm border border-purple-600/20 rounded-lg p-4">
+                        <StyleOptions
+                            options={styleOptions}
+                            onChange={setStyleOptions}
+                        />
+                    </div>
+                </div>
 
-            <ImageGeneration
-                onGenerate={handleGenerate}
-                isGenerating={isGenerating}
-                generatedImageUrl={generatedImageUrl}
-            />
+                <div className="relative">
+                    <div className="absolute inset-0 bg-purple-600/5 blur-lg rounded-lg" />
+                    <div className="relative bg-gray-900/30 backdrop-blur-sm border border-purple-600/20 rounded-lg p-4">
+                        <ImageGeneration
+                            onGenerate={handleGenerate}
+                            isGenerating={isGenerating}
+                            generatedImageUrl={generatedImageUrl}
+                        />
+                    </div>
+                </div>
 
-            {generatedImageUrl && (
-                <GeneratedImageActions
-                    imageUrl={generatedImageUrl}
-                    prompt={prompt}
-                    styleOptions={styleOptions}
-                />
-            )}
+                {generatedImageUrl && (
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-purple-600/5 blur-lg rounded-lg" />
+                        <div className="relative bg-gray-900/30 backdrop-blur-sm border border-purple-600/20 rounded-lg p-4">
+                            <GeneratedImageActions
+                                imageUrl={generatedImageUrl}
+                                prompt={prompt}
+                                styleOptions={styleOptions}
+                            />
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
