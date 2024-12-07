@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { IGalleryImage } from '@/types'
 import { useState } from 'react'
+import { X, Plus, Download, Share2 } from 'lucide-react'
 
 interface ImageDetailModalProps {
     image: IGalleryImage | null
@@ -25,7 +26,6 @@ export function ImageDetailModal({
     const [tags, setTags] = useState<string[]>([])
     const [newTag, setNewTag] = useState('')
 
-    // 이미지가 변경될 때마다 태그 업데이트
     useEffect(() => {
         if (image) {
             setTags(image.tags)
@@ -61,96 +61,136 @@ export function ImageDetailModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-3xl bg-gray-900/95 border-purple-600/20 text-gray-200">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <DialogContent className="max-w-4xl p-0 gap-0 bg-gray-900/95 border-purple-600/20 backdrop-blur-xl">
+                <div className="flex flex-col md:flex-row h-[80vh] md:h-[70vh]">
                     {/* 이미지 섹션 */}
-                    <div className="relative aspect-square">
+                    <div className="relative flex-1 bg-black/50">
                         <img
                             src={image.imageUrl}
                             alt={image.prompt}
-                            className="object-cover rounded-lg w-full h-full ring-2 ring-purple-600/20"
+                            className="absolute inset-0 w-full h-full object-contain"
                         />
                     </div>
 
-                    {/* 정보 섹션 */}
-                    <div className="space-y-6">
-                        <div>
-                            <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
-                                프롬프트
-                            </h3>
-                            <p className="mt-2 text-sm text-gray-300">
-                                {image.prompt}
-                            </p>
-                        </div>
+                    {/* 상세 정보 섹션 */}
+                    <div className="w-full md:w-96 flex flex-col bg-gray-900/50 border-l border-purple-600/10">
+                        {/* 닫기 버튼 */}
+                        <button
+                            onClick={onClose}
+                            className="absolute right-4 top-4 text-gray-400 hover:text-white transition-colors"
+                        >
+                            <X className="h-5 w-5" />
+                        </button>
 
-                        <div>
-                            <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
-                                스타일 옵션
-                            </h3>
-                            <div className="mt-2 space-y-1 text-sm text-gray-300">
-                                <p>
-                                    아트 스타일: {image.styleOptions.artStyle}
-                                </p>
-                                <p>색상 톤: {image.styleOptions.colorTone}</p>
+                        {/* 콘텐츠 */}
+                        <div className="p-6 flex flex-col gap-6 overflow-y-auto flex-grow">
+                            {/* 프롬프트 섹션 */}
+                            <div className="space-y-2">
+                                <h3 className="text-sm font-medium text-purple-400">
+                                    프롬프트
+                                </h3>
+                                <p className="text-gray-200">{image.prompt}</p>
                             </div>
-                        </div>
 
-                        <div>
-                            <h3 className="text-lg font-semibold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">
-                                태그
-                            </h3>
-                            <div className="flex flex-wrap gap-2 mt-2">
-                                {tags.map(tag => (
-                                    <span
-                                        key={tag}
-                                        className="px-2 py-1 bg-gray-800/50 border border-purple-600/20 rounded-full text-sm text-gray-200 flex items-center gap-1"
-                                    >
-                                        {tag}
-                                        <button
-                                            onClick={() => handleRemoveTag(tag)}
-                                            className="text-gray-400 hover:text-red-400 transition-colors"
-                                            type="button"
+                            {/* 스타일 섹션 */}
+                            <div className="space-y-4">
+                                <h3 className="text-sm font-medium text-purple-400">
+                                    스타일 옵션
+                                </h3>
+                                <div className="grid gap-2">
+                                    <div className="flex justify-between">
+                                        <span className="text-sm text-gray-400">
+                                            아트 스타일
+                                        </span>
+                                        <span className="text-sm text-purple-300">
+                                            {image.styleOptions.artStyle}
+                                        </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                        <span className="text-sm text-gray-400">
+                                            색상 톤
+                                        </span>
+                                        <span className="text-sm text-purple-300">
+                                            {image.styleOptions.colorTone}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 태그 섹션 */}
+                            <div className="space-y-3">
+                                <h3 className="text-sm font-medium text-purple-400">
+                                    태그
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {tags.map(tag => (
+                                        <span
+                                            key={tag}
+                                            className="px-2 py-1 bg-purple-600/20 
+                                                     text-purple-300 rounded-full text-sm 
+                                                     flex items-center gap-1 group"
                                         >
-                                            ×
-                                        </button>
-                                    </span>
-                                ))}
-                            </div>
-                            <div className="flex gap-2 mt-3">
-                                <Input
-                                    value={newTag}
-                                    onChange={e => setNewTag(e.target.value)}
-                                    placeholder="새 태그 추가"
-                                    onKeyPress={handleKeyPress}
-                                    className="bg-gray-900/50 border-purple-600/30 text-gray-200 
-                                             placeholder-gray-400 focus:border-purple-500 
-                                             focus:ring-purple-500/30"
-                                />
-                                <Button
-                                    onClick={handleAddTag}
-                                    type="button"
-                                    className="bg-purple-600 hover:bg-purple-700 text-white"
-                                >
-                                    추가
-                                </Button>
+                                            {tag}
+                                            <button
+                                                onClick={() =>
+                                                    handleRemoveTag(tag)
+                                                }
+                                                className="text-purple-400/60 
+                                                         group-hover:text-purple-300 
+                                                         transition-colors"
+                                                type="button"
+                                            >
+                                                <X className="h-3 w-3" />
+                                            </button>
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="flex gap-2">
+                                    <Input
+                                        value={newTag}
+                                        onChange={e =>
+                                            setNewTag(e.target.value)
+                                        }
+                                        placeholder="새 태그 추가"
+                                        onKeyPress={handleKeyPress}
+                                        className="flex-1 h-9 bg-gray-800/50 
+                                                 border-purple-600/30 text-purple-200 
+                                                 placeholder-gray-500"
+                                    />
+                                    <Button
+                                        onClick={handleAddTag}
+                                        type="button"
+                                        size="sm"
+                                        variant="ghost"
+                                        className="h-9 px-3 text-purple-300 
+                                                 hover:text-purple-200 
+                                                 hover:bg-purple-600/30"
+                                    >
+                                        <Plus className="h-4 w-4" />
+                                    </Button>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="flex justify-end gap-2 pt-4">
-                            <Button
-                                variant="outline"
-                                onClick={onClose}
-                                type="button"
-                                className="border-purple-600/30 text-gray-200 hover:bg-purple-600/20"
-                            >
-                                취소
-                            </Button>
+                        {/* 액션 버튼 */}
+                        <div className="p-6 border-t border-purple-600/10 flex gap-2">
                             <Button
                                 onClick={handleSave}
                                 type="button"
-                                className="bg-purple-600 hover:bg-purple-700 text-white"
+                                variant="secondary"
+                                className="flex-1 bg-purple-600/10 text-purple-400 
+                                         hover:bg-purple-600/20 border-0"
                             >
+                                <Download className="h-4 w-4 mr-2" />
                                 저장
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                className="flex-1 bg-purple-600/10 text-purple-400 
+                                         hover:bg-purple-600/20 border-0"
+                            >
+                                <Share2 className="h-4 w-4 mr-2" />
+                                공유
                             </Button>
                         </div>
                     </div>
