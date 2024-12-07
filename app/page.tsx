@@ -1,27 +1,40 @@
+import { Suspense } from 'react'
 import { PromptInput } from '@/components/PromptInput'
-import { CommunityFeedCard } from '@/components/CommunityFeedCard'
-import { mockPosts } from '@/utils/mockData'
+import { CommunityFeed } from '@/components/CommunityFeed'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Home() {
     return (
-        <main className="container mx-auto px-4 py-8 space-y-12">
-            {/* 프롬프트 입력 섹션 */}
-            <section className="pt-8">
-                <h1 className="text-3xl font-bold text-center mb-8">
-                    AI로 상상을 현실로 만들어보세요
-                </h1>
+        <main className="flex min-h-screen flex-col items-center p-4 md:p-24 gap-8">
+            <div className="w-full max-w-3xl">
                 <PromptInput />
-            </section>
-
-            {/* 커뮤니티 피드 섹션 */}
-            <section>
-                <h2 className="text-2xl font-semibold mb-6">커뮤니티 피드</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {mockPosts.map(post => (
-                        <CommunityFeedCard key={post.postId} post={post} />
-                    ))}
-                </div>
-            </section>
+            </div>
+            <Suspense fallback={<CommunityFeedSkeleton />}>
+                <CommunityFeed />
+            </Suspense>
         </main>
+    )
+}
+
+function CommunityFeedSkeleton() {
+    return (
+        <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+                <div
+                    key={i}
+                    className="flex flex-col gap-4 p-4 border rounded-lg"
+                >
+                    <Skeleton className="w-full h-48 rounded-lg" />
+                    <div className="flex items-center gap-2">
+                        <Skeleton className="w-10 h-10 rounded-full" />
+                        <Skeleton className="w-24 h-4" />
+                    </div>
+                    <div className="flex justify-between">
+                        <Skeleton className="w-16 h-4" />
+                        <Skeleton className="w-16 h-4" />
+                    </div>
+                </div>
+            ))}
+        </div>
     )
 }
