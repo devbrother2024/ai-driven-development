@@ -128,6 +128,7 @@ export default function GalleryGrid() {
             {/* 공유 모달 */}
             {shareImage && (
                 <ShareModal
+                    imageUrl={shareImage.imageUrl}
                     imageId={shareImage.id}
                     isOpen={isShareModalOpen}
                     onClose={() => {
