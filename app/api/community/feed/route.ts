@@ -5,6 +5,8 @@ import { desc, eq, sql } from 'drizzle-orm'
 import { getAuth } from '@clerk/nextjs/server'
 import { clerkClient } from '@clerk/nextjs/server'
 
+export const dynamic = 'force-dynamic'
+
 const DEFAULT_PAGE_SIZE = 12
 
 export async function GET(request: NextRequest) {

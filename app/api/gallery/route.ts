@@ -5,6 +5,8 @@ import { images } from '@/db/schema'
 import { currentUser } from '@clerk/nextjs/server'
 import { IGalleryResponse, IErrorResponse } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
     try {
         const user = await currentUser()

@@ -104,69 +104,69 @@ export const mockComments: IComment[] = [
     }
 ]
 
-export const mockGalleryImages: IGalleryImage[] = [
-    {
-        id: '1',
-        userId: 'user1',
-        imageUrl: 'https://picsum.photos/400/400?random=21',
-        prompt: '우주를 나는 고래',
-        styleOptions: {
-            artStyle: '디지털아트',
-            colorTone: '밝은'
-        },
-        categories: ['판타지'],
-        tags: ['우주', '고래', '환상적'],
-        isPublic: true,
-        order: 1,
-        createdAt: '2024-03-20T00:00:00Z',
-        updatedAt: '2024-03-20T00:00:00Z'
-    },
-    {
-        id: '2',
-        userId: 'user1',
-        imageUrl: 'https://picsum.photos/400/400?random=22',
-        prompt: '신비로운 숲속의 요정',
-        styleOptions: {
-            artStyle: '수채화',
-            colorTone: '파스텔'
-        },
-        categories: ['판타지', '자연'],
-        tags: ['요정', '숲', '마법'],
-        isPublic: true,
-        order: 2,
-        createdAt: '2024-03-19T00:00:00Z',
-        updatedAt: '2024-03-19T00:00:00Z'
-    },
-    {
-        id: '3',
-        userId: 'user1',
-        imageUrl: 'https://picsum.photos/400/400?random=23',
-        prompt: '미래도시의 일상',
-        styleOptions: {
-            artStyle: '디지털아트',
-            colorTone: '네온'
-        },
-        categories: ['SF'],
-        tags: ['미래', '도시', '사이버펑크'],
-        isPublic: false,
-        order: 3,
-        createdAt: '2024-03-18T00:00:00Z',
-        updatedAt: '2024-03-18T00:00:00Z'
-    },
-    {
-        id: '4',
-        userId: 'user1',
-        imageUrl: 'https://picsum.photos/400/400?random=24',
-        prompt: '고양이와 책이 있는 아늑한 방',
-        styleOptions: {
-            artStyle: '유화',
-            colorTone: '따뜻한'
-        },
-        categories: ['일상'],
-        tags: ['고양이', '인테리어', '아늑함'],
-        isPublic: true,
-        order: 4,
-        createdAt: '2024-03-17T00:00:00Z',
-        updatedAt: '2024-03-17T00:00:00Z'
-    }
-]
+// export const mockGalleryImages: IGalleryImage[] = [
+//     {
+//         id: '1',
+//         userId: 'user1',
+//         imageUrl: 'https://picsum.photos/400/400?random=21',
+//         prompt: '우주를 나는 고래',
+//         styleOptions: {
+//             artStyle: '디지털아트',
+//             colorTone: '밝은'
+//         },
+//         categories: ['판타지'],
+//         tags: ['우주', '고래', '환상적'],
+//         isPublic: true,
+//         order: 1,
+//         createdAt: '2024-03-20T00:00:00Z',
+//         updatedAt: '2024-03-20T00:00:00Z'
+//     },
+//     {
+//         id: '2',
+//         userId: 'user1',
+//         imageUrl: 'https://picsum.photos/400/400?random=22',
+//         prompt: '신비로운 숲속의 요정',
+//         styleOptions: {
+//             artStyle: '수채화',
+//             colorTone: '파스텔'
+//         },
+//         categories: ['판타지', '자연'],
+//         tags: ['요정', '숲', '마법'],
+//         isPublic: true,
+//         order: 2,
+//         createdAt: '2024-03-19T00:00:00Z',
+//         updatedAt: '2024-03-19T00:00:00Z'
+//     },
+//     {
+//         id: '3',
+//         userId: 'user1',
+//         imageUrl: 'https://picsum.photos/400/400?random=23',
+//         prompt: '미래도시의 일상',
+//         styleOptions: {
+//             artStyle: '디지털아트',
+//             colorTone: '네온'
+//         },
+//         categories: ['SF'],
+//         tags: ['미래', '도시', '사이버펑크'],
+//         isPublic: false,
+//         order: 3,
+//         createdAt: '2024-03-18T00:00:00Z',
+//         updatedAt: '2024-03-18T00:00:00Z'
+//     },
+//     {
+//         id: '4',
+//         userId: 'user1',
+//         imageUrl: 'https://picsum.photos/400/400?random=24',
+//         prompt: '고양이와 책이 있는 아늑한 방',
+//         styleOptions: {
+//             artStyle: '유화',
+//             colorTone: '따뜻한'
+//         },
+//         categories: ['일상'],
+//         tags: ['고양이', '인테리어', '아늑함'],
+//         isPublic: true,
+//         order: 4,
+//         createdAt: '2024-03-17T00:00:00Z',
+//         updatedAt: '2024-03-17T00:00:00Z'
+//     }
+// ]
