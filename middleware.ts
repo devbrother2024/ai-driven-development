@@ -3,6 +3,7 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 // 공개 접근이 가능한 경로 정의
 const isPublicRoute = createRouteMatcher([
     '/', // 메인 페이지
+    '/api/community/feed(.*)', // 커뮤니티 피드 페이지
     '/sign-in(.*)', // 로그인 페이지
     '/sign-up(.*)', // 회원가입 페이지
     '/api/webhook(.*)', // Webhook 엔드포인트
